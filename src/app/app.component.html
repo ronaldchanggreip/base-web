@@ -1,0 +1,205 @@
+<div class="layout-wrapper" [ngClass]="{'layout-compact':layoutCompact}">
+
+    <div #layoutContainer class="layout-container"
+         [ngClass]="{'menu-layout-static': !isOverlay(),
+            'menu-layout-overlay': isOverlay(),
+            'layout-menu-overlay-active': overlayMenuActive,
+            'menu-layout-horizontal': isHorizontal(),
+            'layout-menu-static-inactive': staticMenuDesktopInactive,
+            'layout-menu-static-active': staticMenuMobileActive}">
+
+        <app-topbar></app-topbar>
+
+        <div id="divMenu" style="visibility: hidden" class="layout-menu" [ngClass]="{'layout-menu-dark':darkMenu}" (click)="onMenuClick($event)">
+            <div #layoutMenuScroller class="nano">
+                <div class="nano-content menu-scroll-content" >
+                    <inline-profile *ngIf="profileMode=='inline'&&!isHorizontal()"></inline-profile>
+                    <app-menu [reset]="resetMenu"></app-menu>
+                </div>
+            </div>
+        </div>
+
+        <div class="layout-main">
+            <router-outlet></router-outlet>
+
+            <app-footer></app-footer>
+
+        </div>
+
+        <p-dialog header="Información General" [width]="widthDialog" [(visible)]="displayDlgInfoSistema" [responsive]="true"
+                  [modal]="true">
+
+
+            <p-fieldset legend="Sistema">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Identificador: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisIdApp}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Versión: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisAppVersion}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Ancho: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisWidth}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Alto: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisHeigth}}</div>
+                </div>
+
+
+            </p-fieldset>
+            <p-fieldset legend="Servidor de Seguridad">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Servidor: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisServerIpSeguridad}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Puerto: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisServerPortSeguridad}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Url: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisBaseUrlSecurity}}</div>
+                </div>
+            </p-fieldset>
+            <p-fieldset legend="Servidor de Recursos">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Servidor: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisServerIp}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Puerto: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisServerPort}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Url: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisBaseUrl}}</div></div>
+            </p-fieldset>
+            <br/>
+            <br/>
+        </p-dialog>
+
+        <p-dialog header="Información del Usuario"  [width]="widthDialog" [(visible)]="displayDlgInfoUsuario" [responsive]="true"
+                  [modal]="true">
+
+            <p-fieldset legend="Usuario" >
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Nombre: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{usuarioSession.nombre || ''}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Login: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{usuarioSession.login ||''}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Email: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{usuarioSession.email || ''}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Vigencia: </label></div>
+                    <div class="ui-grid-col-6" style='font-size:12px'>{{usuarioSession.fecVigencia | date:'dd/MM/yyyy' || ''}}</div>
+                </div>
+
+            </p-fieldset>
+            <p-fieldset legend="Roles">
+                -----------------
+            </p-fieldset>
+            <br/>
+            <br/>
+        </p-dialog>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+<p-dialog header="Información General" [width]="widthDialog" [(visible)]="displayDlgInfoSistema" [responsive]="true"
+          [modal]="true">
+
+
+    <p-fieldset legend="Sistema">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Identificador: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisIdApp}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Versión: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisAppVersion}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Ancho: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisWidth}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Alto: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisHeigth}}</div>
+        </div>
+
+
+    </p-fieldset>
+    <p-fieldset legend="Servidor de Seguridad">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Servidor: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisServerIpSeguridad}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Puerto: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisServerPortSeguridad}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Url: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisBaseUrlSecurity}}</div>
+        </div>
+    </p-fieldset>
+    <p-fieldset legend="Servidor de Recursos">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Servidor: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisServerIp}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Puerto: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisServerPort}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Url: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{infoSisBaseUrl}}</div></div>
+    </p-fieldset>
+    <br/>
+    <br/>
+</p-dialog>
+
+<p-dialog header="Información del Usuario"  [width]="widthDialog" [(visible)]="displayDlgInfoUsuario" [responsive]="true"
+          [modal]="true">
+
+    <p-fieldset legend="Usuario" >
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Nombre: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{usuarioSession.nombre || ''}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Login: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{usuarioSession.login ||''}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Email: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{usuarioSession.email || ''}}</div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:11px'>Vigencia: </label></div>
+            <div class="ui-grid-col-6" style='font-size:12px'>{{usuarioSession.fecVigencia | date:'dd/MM/yyyy' || ''}}</div>
+        </div>
+
+    </p-fieldset>
+    <p-fieldset legend="Roles">
+        -----------------
+    </p-fieldset>
+    <br/>
+    <br/>
+</p-dialog>

@@ -1,0 +1,189 @@
+<p-growl [value]="msgsPrincipal"></p-growl>
+    <p-tabView>
+        <p-tabPanel header="Datos Generales">
+            <form [formGroup]="socioNegocioForm" (ngSubmit)="save()">
+                <div class="ui-grid ui-grid-responsive ui-fluid">
+                    <div class="ui-grid-row" *ngIf="accion==2">
+                        <div class="ui-grid-col-2"><label for="id" style='font-weight: bold'>Id</label></div>
+                        {{dto.id}}
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fTipoDoc" style='font-weight: bold'>Tipo documento *</label></div>
+                        <div class="ui-grid-col-4">
+                            <p-dropdown id="fTipoDoc" (onChange)="changeTipoDocumento()" [options]="sitTipoDocumento" formControlName="tipoDocumentoDto" [style]="{'width':'100%'}"></p-dropdown>
+                            <control-messages [control]="socioNegocioForm.controls['tipoDocumentoDto']"></control-messages>
+                        </div>
+                        <div class="ui-grid-col-2"><label for="fNumDoc"  style='font-weight: bold'>Núm. doc. *</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fNumDoc" formControlName="numDocumento" pTooltip="Ingrese el núm. doc."/>
+                            <control-messages [control]="socioNegocioForm.controls['numDocumento']"></control-messages>
+                        </div>
+                    </div>
+                    <div *ngIf="tipoDoc == 'N'">
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fNombres" style='font-weight: bold'>Nombres *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fNombres" formControlName="nombres" pTooltip="Ingrese los nombres"/>
+                                <control-messages [control]="socioNegocioForm.controls['nombres']"></control-messages>
+                            </div>
+                            <div class="ui-grid-col-2"><label for="fApPaterno"  style='font-weight: bold'>Ap. paterno *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fApPaterno" formControlName="apPaterno" pTooltip="Ingrese el apellido paterno"/>
+                                <control-messages [control]="socioNegocioForm.controls['apPaterno']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fApMaterno"  style='font-weight: bold'>Ap. paterno *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fApMaterno" formControlName="apMaterno" pTooltip="Ingrese el apellido materno"/>
+                                <control-messages [control]="socioNegocioForm.controls['apMaterno']"></control-messages>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div *ngIf="tipoDoc == 'J'">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fRazSoc"  style='font-weight: bold'>Razón social *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fRazSoc" formControlName="razSocial" pTooltip="Ingrese la razón social"/>
+                                <control-messages [control]="socioNegocioForm.controls['razSocial']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fIndCli"  style='font-weight: bold'>¿Cliente?</label></div>
+                        <div class="ui-grid-col-4">
+                            <p-checkbox id="fIndCli" binary="true" formControlName="indCliente"></p-checkbox>
+                            <control-messages [control]="socioNegocioForm.controls['indCliente']"></control-messages>
+                        </div>
+
+                        <div class="ui-grid-col-2"><label for="fIndProv" style='font-weight: bold'>¿Proveedor?</label></div>
+                        <div class="ui-grid-col-4">
+                            <p-checkbox id="fIndProv" binary="true" formControlName="indProveedor"></p-checkbox>
+                            <control-messages [control]="socioNegocioForm.controls['indProveedor']"></control-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fTelPrinc"  style='font-weight: bold'>Teléfono principal</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fTelPrinc" formControlName="telefPrincipal" pTooltip="Ingrese el telef. principal"/>
+                            <control-messages [control]="socioNegocioForm.controls['telefPrincipal']"></control-messages>
+                        </div>
+                        <div class="ui-grid-col-2"><label for="fAnexP" style='font-weight: bold'>Anexo principal</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fAnexP" formControlName="anexoPrincipal" pTooltip="Ingrese el anexo principal"/>
+                            <control-messages [control]="socioNegocioForm.controls['anexoPrincipal']"></control-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fTelSec"  style='font-weight: bold'>Teléfono secundario</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fTelSec" formControlName="telefSecundario" pTooltip="Ingrese el telef. secundario"/>
+                            <control-messages [control]="socioNegocioForm.controls['telefSecundario']"></control-messages>
+                        </div>
+                        <div class="ui-grid-col-2"><label for="fAnexS" style='font-weight: bold'>Anexo Secundario</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fAnexS" formControlName="anexoSecundario" pTooltip="Ingrese el anexo secundario"/>
+                            <control-messages [control]="socioNegocioForm.controls['anexoSecundario']"></control-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fMovPrinc"  style='font-weight: bold'>Móvil principal</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fMovPrinc" formControlName="movilPrincipal" pTooltip="Ingrese el móvil principal"/>
+                            <control-messages [control]="socioNegocioForm.controls['movilPrincipal']"></control-messages>
+                        </div>
+
+                        <div class="ui-grid-col-2"><label for="fMovSec" style='font-weight: bold'>Móvil Secundario</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fMovSec" formControlName="movilSecundario" pTooltip="Ingrese el móvil secundario"/>
+                            <control-messages [control]="socioNegocioForm.controls['movilSecundario']"></control-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fNacion"  style='font-weight: bold'>Nacionalidad *</label></div>
+                        <div class="ui-grid-col-4">
+                            <p-dropdown [options]="sitUbigeo" filter="true" formControlName="nacionalidadDto" [style]="{'width':'100%'}"></p-dropdown>
+                            <control-messages [control]="socioNegocioForm.controls['nacionalidadDto']"></control-messages>
+                        </div>
+
+                        <div class="ui-grid-col-2"><label for="fEsta" style='font-weight: bold'>Estado *</label></div>
+                        <div class="ui-grid-col-4">
+                            <p-dropdown id="fEsta" [options]="sitEstado" formControlName="estado" [style]="{'width':'100%'}"></p-dropdown>
+                            <control-messages [control]="socioNegocioForm.controls['estado']"></control-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="comentario"  style='font-weight: bold'>Comentario</label></div>
+                        <div class="ui-grid-col-10">
+                            <textarea rows="2" cols="30" pInputTextarea formControlName="comentario" pTooltip="Ingrese un comentario"></textarea>
+                            <control-messages [control]="socioNegocioForm.controls['comentario']"></control-messages>
+                        </div>
+                        <br>
+                    </div>
+                    <br>
+                </div>
+
+                <p-accordion>
+                    <p-accordionTab header="Auditoria del Registro">
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Creacion: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioCreacionDto.nombre || ''}}</div>
+                            <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Modificación: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioDto.nombre || ''}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Creación: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>
+                                {{dto.fechaCreacion | date:'dd/MM/yyyy hh:mm:ss'}}
+                            </div>
+                            <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Modificación: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>
+                                {{dto.fecha | date:'dd/MM/yyyy hh:mm:ss'}}
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Creacion: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>
+                                {{dto.terminalCreacion}}
+                            </div>
+                            <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Modificación: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>
+                                {{dto.terminal}}
+                            </div>
+                        </div>
+
+                    </p-accordionTab>
+
+                </p-accordion>
+                <br>
+                <br>
+
+                <div class="ui-widget-content ui-helper-clearfix">
+                    <button type="submit" pButton icon="fa-check" [disabled]="!socioNegocioForm.valid" label="Guardar"></button>
+                </div>
+
+            </form>
+        </p-tabPanel>
+        <p-tabPanel header="Cuentas" *ngIf="accion==2">
+            <socioNegocioCuentaList [dtoSocio]='dto'></socioNegocioCuentaList>
+        </p-tabPanel>
+    </p-tabView>
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog>

@@ -1,0 +1,113 @@
+<p-dialog header="Moneda" [width]="widthDialog" [(visible)]="displayDialog" [responsive]="true" [modal]="true"
+    *ngIf="dto" (onBeforeHide)='onBeforeHide($event)' (onBeforeShow)='onBeforeShow($event)'>
+    <form [formGroup]="monedaForm" (ngSubmit)="save()">
+        <p-messages [value]="msgsPrincipal"></p-messages>
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+
+            <div class="ui-grid-row" *ngIf="accion==2">
+                <div class="ui-grid-col-2"><label for="id" style='font-weight: bold'>Id</label></div>
+                {{dto.id}}
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="nombre"  style='font-weight: bold'>Nombre *</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="nombre" formControlName="nombre" pTooltip="Ingrese el nombre"/>
+                    <control-messages [control]="monedaForm.controls['nombre']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="nombreCorto"  style='font-weight: bold'>Nombre Corto *</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="nombreCorto" formControlName="nombreCorto" pTooltip="Ingrese el nombre corto"/>
+                    <control-messages [control]="monedaForm.controls['nombreCorto']"></control-messages>
+                </div>
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="nombreTrx"  style='font-weight: bold'>Nombre trx *</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="nombreTrx" formControlName="nombreTrx" pTooltip="Ingrese el nombre trx"/>
+                    <control-messages [control]="monedaForm.controls['nombreTrx']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="simbolo"  style='font-weight: bold'>Simbolo *</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="simbolo" formControlName="simbolo" pTooltip="Ingrese el símbolo"/>
+                    <control-messages [control]="monedaForm.controls['simbolo']"></control-messages>
+                </div>
+            </div>
+            <br>
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="estado"  style='font-weight: bold'>Estado</label></div>
+                <div class="ui-grid-col-4">
+                    <p-checkbox binary="true" formControlName="estado"></p-checkbox>
+                    <control-messages [control]="monedaForm.controls['estado']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="paisDto"  style='font-weight: bold'>País *</label></div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown [options]="sitUbigeo" formControlName="paisDto" [style]="{'width':'250px'}"></p-dropdown>
+                    <control-messages [control]="monedaForm.controls['paisDto']"></control-messages>
+                </div>
+            </div>
+            <br>
+
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="comentario"  style='font-weight: bold'>Comentario</label></div>
+                <div class="ui-grid-col-10">
+                    <textarea rows="2" cols="30" pInputTextarea formControlName="comentario" pTooltip="Ingrese un comentario"></textarea>
+                    <control-messages [control]="monedaForm.controls['comentario']"></control-messages>
+                </div>
+                <br>
+            </div>
+            <br>
+        </div>
+
+        <p-accordion>
+            <p-accordionTab header="Auditoria del Registro" *ngIf="accion==2">
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Creacion: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioCreacionDto.nombre || ''}}</div>
+                    <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Modificación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioDto.nombre || ''}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Creación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.fechaCreacion | date:'dd/MM/yyyy hh:mm:ss'}}
+                    </div>
+                    <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Modificación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.fecha | date:'dd/MM/yyyy hh:mm:ss'}}
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Creacion: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.terminalCreacion}}
+                    </div>
+                    <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Modificación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.terminal}}
+                    </div>
+                </div>
+
+            </p-accordionTab>
+
+        </p-accordion>
+
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" (click)="close()" label="Cerrar"></button>
+                <button type="submit" pButton icon="fa-check" [disabled]="!monedaForm.valid" label="Guardar"></button>
+            </div>
+        </footer>
+    </form>
+</p-dialog>
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog>

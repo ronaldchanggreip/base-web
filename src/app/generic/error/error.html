@@ -1,0 +1,36 @@
+
+<p-dialog header="Mensaje del Sistema" class="exception-body error-page" [width]="widthDialog" [(visible)]="displayDialogError" [responsive]="true" showEffect="fade"
+        [modal]="true" *ngIf="dtoError" (onBeforeHide)='onBeforeHide($event)' (onBeforeShow)='onBeforeShow($event)'>
+      <!--
+        <div class="exception-type">
+          <img src="assets/layout/images/error.svg"  width="widthDialog">
+      </div>
+        -->
+    <br />
+          <h1 style="color: red; text-align: center;">{{dtoError.codigoHttp}}</h1>
+          <h3 style="color: red; text-align: center;">{{dtoError.resumenHttp}}</h3>
+          <span style="text-align: center;">{{dtoError.mensajeUsuario}}</span>
+
+    <br />
+
+              <p-fieldset legend="Información para Sistema" >
+                  <div class="ui-grid-row">
+                      <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:12px'>Mensaje: </label></div>
+                      <div class="ui-grid-col-10" style='font-size:14px'>{{dtoError.mensajeSistemaHttp || ''}}</div>
+                  </div>
+                  <div class="ui-grid-row">
+                      <div class="ui-grid-col-2"><label style='font-weight: bold; font-size:12px'>Detalle: </label></div>
+                      <div class="ui-grid-col-10" style='font-size:14px'>{{dtoError.detalle || ''}}</div>
+                  </div>
+              </p-fieldset>
+
+    <br />
+
+
+          <!--
+          <a href="/" class="ui-button secondary">
+              <span class="ui-button-text">Inicio</span>
+          </a>
+          -->
+
+</p-dialog>       

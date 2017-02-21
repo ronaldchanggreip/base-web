@@ -1,0 +1,61 @@
+
+
+<div class="ui-g">
+            
+    <div class="ui-g-12">
+        
+            <p-growl [value]="msgsPrincipal"></p-growl>
+            <h1>Gestión de Socio de Negocio</h1>
+            <div class="ui-helper-clearfix" style="width:100%">
+                 <label for="fId" style='font-weight: bold'>Id: </label>
+                 <input pInputText id="fId" style="width: 5%" [(ngModel)]="dtoFilter.id" />
+
+                 <label for="fNombre" style='font-weight: bold'>Nombre completo: </label>
+                 <input pInputText id="fNombre" style="width: 30%"  [(ngModel)]="dtoFilter.nombreCompleto"/>
+
+                 <label for="fNumDoc" style='font-weight: bold'>Núme. documento: </label>
+                 <input pInputText id="fNumDoc" style="width: 20%"  [(ngModel)]="dtoFilter.numDocumento"/>
+                 <button  pButton icon="ui-icon-find-in-page"  (click)="buscar()" label="Buscar"></button>
+
+            </div>
+            <br>    
+            <div class="ui-helper-clearfix" style="width:100%">
+                
+                <button type="button" pButton icon="ui-icon-edit" style="float:right" (click)="editar()" label="Editar" *ngIf="activeBtnEditar==true"></button>
+                <button type="button" pButton icon="ui-icon-content-copy" style="float:right" (click)="clonar()" label="Clonar" *ngIf="activeBtnClonar==true"></button>
+                <button type="button" pButton icon="ui-icon-line-weight" style="float:right" (click)="bitacora()" label="Bitacora" *ngIf="activeBtnBitacora==true"></button>                
+                <button type="button" pButton icon="ui-icon-delete" style="float:right" (click)="eliminar()" label="Eliminar" *ngIf="activeBtnEliminar==true"></button>
+                <button type="button" pButton icon="ui-icon-add" style="float:right" (click)="nuevo()" label="Nuevo"></button>
+            </div>    
+            <p-dataTable [value]="listaDto" selectionMode="multiple"   [(selection)]="selectedDtos"  (onRowSelect)='onRowSelect($event)' 
+                (onRowUnselect)='onRowUnselect($event)' (onHeaderCheckboxToggle) = 'onHeaderCheckboxToggle($event)'
+                          
+                [paginator]="true" [rows]="10" [responsive]="true">
+                <header>
+                    Lista de Socios de Negocio
+                </header>
+                <p-column [style]="{'width':'40px', 'text-align':'center'}"  selectionMode="multiple"></p-column>
+
+                <p-column [style]="{'width':'70px', 'text-align':'center'}" field="id" header="Id"></p-column>
+                <p-column [style]="{'width':'30%', 'text-align':'left'}" field="nombreCompleto" header="Nombre completo" [sortable]="true"></p-column>
+                <p-column [style]="{'width':'10%', 'text-align':'center'}" field="tipoDocumentoDto.descripcion" header="Tipo documento"></p-column>
+                <p-column [style]="{'width':'10%', 'text-align':'left'}" field="numDocumento" header="Núm doc."></p-column>
+                <p-column [style]="{'width':'10%', 'text-align':'center'}" field="indProveedorDesc" header="¿Proveedor?"></p-column>
+                <p-column [style]="{'width':'10%', 'text-align':'center'}" field="indClienteDesc" header="¿Cliente?"></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'left'}" field="nacionalidadDto.nombre" header="Nacionalidad"></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="estadoDesc" header="Estado"></p-column>
+            </p-dataTable>
+        </div>
+    </div>
+
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog> 
+
+<socioNegocioForm [dto]='dto' [displayDialog]='displayDialog' [accion]='accion' (respuesta)="respuesta($event)"></socioNegocioForm>
+
+<errorForm [dtoError]='dtoError' [displayDialogError]='displayDialogError' (respuesta)="respuestaError($event)"></errorForm>

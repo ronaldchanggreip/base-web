@@ -1,0 +1,198 @@
+<p-dialog header="Usuario"  [width]="widthDialog" [(visible)]="displayDialog" [responsive]="true" [modal]="true"
+          *ngIf="dto" (onBeforeHide)='onBeforeHide($event)' (onBeforeShow)='onBeforeShow($event)'>
+    <p-messages [value]="msgsPrincipal"></p-messages>
+        <form [formGroup]="usuarioForm" (ngSubmit)="save()">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
+                <p-fieldset legend="Datos generales">
+                    <div class="ui-grid-row" *ngIf="accion==2">
+                        <div class="ui-grid-col-2"><label for="id" style='font-weight: bold'>Id</label></div>
+                        {{dto.id}}
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fnombre"  style='font-weight: bold'>Nombre</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fnombre" formControlName="nombre" pTooltip="Ingrese el Nombre"/>
+                            <control-messages [control]="usuarioForm.controls['nombre']"></control-messages>
+                        </div>
+
+                        <div class="ui-grid-col-2"><label for="fRol" style='font-weight: bold'>Rol</label></div>
+                        <div class="ui-grid-col-4">
+                            <p-dropdown id="fRol" (onChange)="changeRol()" [options]="sitRol" formControlName="rolDto" [style]="{'width':'100%'}"></p-dropdown>
+                            <control-messages [control]="usuarioForm.controls['rolDto']"></control-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fLogin"  style='font-weight: bold'>Login</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fLogin" formControlName="login" pTooltip="Ingrese el Login"/>
+                            <control-messages [control]="usuarioForm.controls['login']"></control-messages>
+                        </div>
+
+                        <div class="ui-grid-col-2"><label for="fBloqueado" style='font-weight: bold'>Bloqueado</label></div>
+                        <div class="ui-grid-col-4">
+                            <p-checkbox binary="true" formControlName="indBloqueado"></p-checkbox>
+                            <control-messages [control]="usuarioForm.controls['indBloqueado']"></control-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fEmail"  style='font-weight: bold'>Email</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fEmail" formControlName="email" pTooltip="Ingrese el Email"/>
+                            <control-messages [control]="usuarioForm.controls['email']"></control-messages>
+                        </div>
+
+                        <div class="ui-grid-col-2"><label for="fEstado" style='font-weight: bold'>Estado</label></div>
+                        <div class="ui-grid-col-4">
+                            <p-checkbox binary="true" formControlName="estado"></p-checkbox>
+                            <control-messages [control]="usuarioForm.controls['estado']"></control-messages>
+                        </div>
+                    </div>
+                    <div *ngIf="accion!=2">
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fConfEmail"  style='font-weight: bold'>Confirmar Email</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fConfEmail" formControlName="confirmEmail" pTooltip="Confirme el Email"/>
+                                <control-messages [control]="usuarioForm.controls['confirmEmail']"></control-messages>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div *ngIf="accion==2">
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label   style='font-weight: bold'>Cambiar contraseña</label></div>
+                            <div class="ui-grid-col-4">
+                                <p-inputSwitch onLabel="Si" offLabel="No" (onChange)="changeCambiarContrasena()" formControlName="cambiarPassword"></p-inputSwitch>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+
+                    <div *ngIf="isChangePassword">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fContrasena"  style='font-weight: bold'>Contraseña</label></div>
+                            <div class="ui-grid-col-4">
+                                <input type="password" pPassword id="fContrasena" formControlName="contrasena" pTooltip="Ingrese el contraseña"/>
+                                <control-messages [control]="usuarioForm.controls['contrasena']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fConfContrasena"  style='font-weight: bold'>Confirmar Contraseña</label></div>
+                            <div class="ui-grid-col-4">
+                                <input type="password" pPassword id="fConfContrasena" formControlName="confirmContrasena" pTooltip="Confirme la contraseña"/>
+                                <control-messages [control]="usuarioForm.controls['confirmContrasena']"></control-messages>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+
+                <br>
+                <p-fieldset legend="Datos del Socio de Negocio" *ngIf="visibleSocNego">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fTipoDoc" style='font-weight: bold'>Tipo documento *</label></div>
+                        <div class="ui-grid-col-4">
+                            <p-dropdown id="fTipoDoc" (onChange)="changeTipoDocumento()" [options]="sitTipoDocumento" formControlName="tipoDocumentoDto" [style]="{'width':'100%'}"></p-dropdown>
+                            <control-messages [control]="usuarioForm.controls['tipoDocumentoDto']"></control-messages>
+                        </div>
+                        <div class="ui-grid-col-2"><label for="fNumDoc"  style='font-weight: bold'>Núm. doc. *</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fNumDoc" (blur)="onBlurNumDoc()" formControlName="numDocumento" pTooltip="Ingrese el núm. doc."/>
+                            <control-messages [control]="usuarioForm.controls['numDocumento']"></control-messages>
+                        </div>
+                    </div>
+                    <div *ngIf="tipoDoc == 'N'">
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fNombres" style='font-weight: bold'>Nombres *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fNombres" formControlName="nombres" pTooltip="Ingrese los nombres"/>
+                                <control-messages [control]="usuarioForm.controls['nombres']"></control-messages>
+                            </div>
+                            <div class="ui-grid-col-2"><label for="fApPaterno"  style='font-weight: bold'>Ap. paterno *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fApPaterno" formControlName="apPaterno" pTooltip="Ingrese el apellido paterno"/>
+                                <control-messages [control]="usuarioForm.controls['apPaterno']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fApMaterno"  style='font-weight: bold'>Ap. paterno *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fApMaterno" formControlName="apMaterno" pTooltip="Ingrese el apellido materno"/>
+                                <control-messages [control]="usuarioForm.controls['apMaterno']"></control-messages>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div *ngIf="tipoDoc == 'J'">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fRazSoc"  style='font-weight: bold'>Razón social *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fRazSoc" formControlName="razSocial" pTooltip="Ingrese la razón social"/>
+                                <control-messages [control]="usuarioForm.controls['razSocial']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </p-fieldset>
+                <br>
+                <br>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="comentario"  style='font-weight: bold'>Comentario</label></div>
+                    <div class="ui-grid-col-10">
+                        <textarea rows="2" cols="30" pInputTextarea formControlName="comentario" pTooltip="Ingrese un comentario"></textarea>
+                        <control-messages [control]="usuarioForm.controls['comentario']"></control-messages>
+                    </div>
+                    <br>
+                </div>
+                <br>
+            </div>
+
+            <p-accordion>
+                <p-accordionTab header="Auditoria del Registro" *ngIf="accion==2">
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Creación: </label></div>
+                        <div class="ui-grid-col-4" style='font-size:12px'>
+                            {{dto.fechaCreacion | date:'dd/MM/yyyy hh:mm:ss'}}
+                        </div>
+                        <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Modificación: </label></div>
+                        <div class="ui-grid-col-4" style='font-size:12px'>
+                            {{dto.fecha | date:'dd/MM/yyyy hh:mm:ss'}}
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Creacion: </label></div>
+                        <div class="ui-grid-col-4" style='font-size:12px'>
+                            {{dto.terminalCreacion}}
+                        </div>
+                        <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Modificación: </label></div>
+                        <div class="ui-grid-col-4" style='font-size:12px'>
+                            {{dto.terminal}}
+                        </div>
+                    </div>
+
+                </p-accordionTab>
+
+            </p-accordion>
+
+            <footer>
+                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                    <button type="button" pButton icon="fa-close" (click)="close()" label="Cerrar"></button>
+                    <button type="submit" pButton icon="fa-check" [disabled]="!usuarioForm.valid" label="Guardar"></button>
+                </div>
+            </footer>
+        </form>
+</p-dialog>
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog>

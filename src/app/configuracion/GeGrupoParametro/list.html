@@ -1,0 +1,54 @@
+
+
+<div class="ui-g">
+            
+    <div class="ui-g-12">
+        
+            <p-growl [value]="msgsPrincipal"></p-growl>
+            <h1>Gestion de Grupo de Parametros</h1>
+             <div class="ui-helper-clearfix" style="width:100%">
+                 <label for="fId" style='font-weight: bold'>Id: </label>
+                 <input pInputText id="fId" [(ngModel)]="dtoFilter.id" />
+                 <label for="fNombre" style='font-weight: bold'>Nombre: </label>
+                 <input pInputText id="fNombre" [(ngModel)]="dtoFilter.nombre"/>
+                 <label for="fTipo" style='font-weight: bold'>Tipo: </label>
+                 <p-dropdown [options]="sitTiposGrupoParametro" [(ngModel)]="dtoFilter.tipo"  ></p-dropdown>
+                <button  pButton icon="ui-icon-find-in-page"  (click)="buscar()" label="Buscar"></button>
+
+            </div>
+            <br>    
+            <div class="ui-helper-clearfix" style="width:100%">
+                
+                <button type="button" pButton icon="ui-icon-edit" style="float:right" (click)="editar()" label="Editar" *ngIf="activeBtnEditar==true"></button>
+                <button type="button" pButton icon="ui-icon-content-copy" style="float:right" (click)="clonar()" label="Clonar" *ngIf="activeBtnClonar==true"></button>
+                <button type="button" pButton icon="ui-icon-line-weight" style="float:right" (click)="bitacora()" label="Bitacora" *ngIf="activeBtnBitacora==true"></button>                
+                <button type="button" pButton icon="ui-icon-delete" style="float:right" (click)="eliminar()" label="Eliminar" *ngIf="activeBtnEliminar==true"></button>
+                <button type="button" pButton icon="ui-icon-add" style="float:right" (click)="nuevo()" label="Nuevo"></button>
+            </div>    
+            <p-dataTable [value]="listaDto" selectionMode="multiple"   [(selection)]="selectedDtos"  (onRowSelect)='onRowSelect($event)' 
+                (onRowUnselect)='onRowUnselect($event)' (onHeaderCheckboxToggle) = 'onHeaderCheckboxToggle($event)'
+                          
+                [paginator]="true" [rows]="10" [responsive]="true">
+                <header>
+                    Lista de Grupos de Parametros
+                </header>
+                <p-column [style]="{'width':'40px', 'text-align':'center'}"  selectionMode="multiple"></p-column>
+
+                <p-column [style]="{'width':'70px', 'text-align':'center'}" field="id" header="Id"></p-column>
+                <p-column [style]="{'width':'60%'}" field="nombre" header="Nombre" [sortable]="true"></p-column>
+                <p-column [style]="{'width':'15%', 'text-align':'center'}" field="tipoDesc" header="Tipo" [sortable]="true" ></p-column>
+            </p-dataTable>
+        </div>
+    </div>
+
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog> 
+
+<grupoParametroForm [dto]='dto' [displayDialog]='displayDialog' [accion]='accion' (respuesta)="respuesta($event)"></grupoParametroForm>
+
+<errorForm [dtoError]='dtoError' [displayDialogError]='displayDialogError' (respuesta)="respuestaError($event)"></errorForm>

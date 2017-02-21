@@ -1,0 +1,33 @@
+
+
+
+
+<div class="ui-g">
+    <div class="ui-g-12">    
+        ARBOL
+<p-tree [value]="arbol" layout="horizontal" selectionMode="single" [(selection)]="selectArbol" 
+    (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"></p-tree>
+<br>
+AUTOCOMPLETE
+<br>
+<p-autoComplete [(ngModel)]="invento" [suggestions]="filteredCountriesSingle" (completeMethod)="filterCountrySingle($event)" field="nombre" [size]="30"
+    placeholder="Inventos" [minLength]="1"></p-autoComplete>
+<span style="margin-left:10px">Invento: {{invento ? invento.nombre||invento : 'none'}}</span>
+<br>
+FECHA
+<br>
+{{today}}
+
+<br>
+<br>
+{{checkBox | GeSiNoPipe}}
+<br>
+<br>
+
+            <div class="ui-helper-clearfix" style="width:100%">             
+                <button type="button" pButton icon="ui-icon-add" style="float:right" (click)="login()" label="Nuevo"></button>
+                
+            </div>   
+    </div>
+    <errorForm [dtoError]='dtoError' [displayDialogError]='displayDialogError' (respuesta)="respuestaError($event)"></errorForm>
+</div>

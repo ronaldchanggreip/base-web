@@ -1,0 +1,134 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-growl [value]="msgsPrincipal"></p-growl>
+        <h1>Perfil</h1>
+
+        <p-tabView>
+            <p-tabPanel header="Datos del Usuario">
+                <form [formGroup]="usuarioForm" (ngSubmit)="save()">
+                    <div class="ui-grid-row" *ngIf="accion==2">
+                        <div class="ui-grid-col-2"><label for="id" style='font-weight: bold'>Id</label></div>
+                        {{dto.id}}
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fnombre"  style='font-weight: bold'>Nombre</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fnombre" formControlName="nombre" style="width: 100%" pTooltip="Ingrese el Nombre"/>
+                            <control-messages [control]="usuarioForm.controls['nombre']"></control-messages>
+                        </div>
+
+                        <div class="ui-grid-col-2"><label for="fRol" style='font-weight: bold'>Rol</label></div>
+                        <div class="ui-grid-col-4">
+                            {{dto.rolDto.nombre || ''}}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fLogin"  style='font-weight: bold'>Login</label></div>
+                        <div class="ui-grid-col-4">
+                            {{dto.login}}
+                        </div>
+
+                        <div class="ui-grid-col-2"><label for="fBloqueado" style='font-weight: bold'>¿Bloqueado?</label></div>
+                        {{dto.indBloqueado | GeSiNoPipe}}
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fEmail"  style='font-weight: bold'>Email</label></div>
+                        <div class="ui-grid-col-4">
+                            <input pInputText id="fEmail" formControlName="email" style="width: 100%" pTooltip="Ingrese el Email"/>
+                            <control-messages [control]="usuarioForm.controls['email']"></control-messages>
+                        </div>
+
+                        <div class="ui-grid-col-2"><label for="fEstado" style='font-weight: bold'>Estado</label></div>
+                        <div class="ui-grid-col-4">
+                            {{dto.estado | GeActivoInactivo}}
+                        </div>
+                    </div>
+
+                    <br>
+                    <div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label   style='font-weight: bold'>Cambiar contraseña</label></div>
+                            <div class="ui-grid-col-4">
+                                <p-inputSwitch onLabel="Si" offLabel="No" (onChange)="changeCambiarContrasena()" formControlName="cambiarPassword"></p-inputSwitch>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+
+                    <div *ngIf="isChangePassword">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fContrasena"  style='font-weight: bold'>Contraseña</label></div>
+                            <div class="ui-grid-col-4">
+                                <input type="password" pPassword id="fContrasena" style="width: 100%" formControlName="contrasena" pTooltip="Ingrese el contraseña"/>
+                                <control-messages [control]="usuarioForm.controls['contrasena']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fConfContrasena"  style='font-weight: bold'>Confirmar Contraseña</label></div>
+                            <div class="ui-grid-col-4">
+                                <input type="password" pPassword id="fConfContrasena" style="width: 100%" formControlName="confirmContrasena" pTooltip="Confirme la contraseña"/>
+                                <control-messages [control]="usuarioForm.controls['confirmContrasena']"></control-messages>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <br>
+                    <br>
+
+                    <p-accordion>
+                        <p-accordionTab header="Auditoria del Registro">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Creación: </label></div>
+                                <div class="ui-grid-col-4" style='font-size:12px'>
+                                    {{dto.fechaCreacion | date:'dd/MM/yyyy hh:mm:ss'}}
+                                </div>
+                                <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Modificación: </label></div>
+                                <div class="ui-grid-col-4" style='font-size:12px'>
+                                    {{dto.fecha | date:'dd/MM/yyyy hh:mm:ss'}}
+                                </div>
+                            </div>
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Creacion: </label></div>
+                                <div class="ui-grid-col-4" style='font-size:12px'>
+                                    {{dto.terminalCreacion}}
+                                </div>
+                                <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Modificación: </label></div>
+                                <div class="ui-grid-col-4" style='font-size:12px'>
+                                    {{dto.terminal}}
+                                </div>
+                            </div>
+
+                        </p-accordionTab>
+
+                    </p-accordion>
+                    <br>
+                    <br>
+
+                    <div class="ui-widget-content ui-helper-clearfix">
+                        <button type="submit" pButton icon="fa-check" [disabled]="!usuarioForm.valid" label="Guardar"></button>
+                    </div>
+
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Datos del Socio de Negocio" *ngIf="visibleSocNego">
+                <socioNegocioIncludeForm [dto]='socioDto'></socioNegocioIncludeForm>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog>
+
+<errorForm [dtoError]='dtoError' [displayDialogError]='displayDialogError' (respuesta)="respuestaError($event)"></errorForm>

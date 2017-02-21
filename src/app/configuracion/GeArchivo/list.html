@@ -1,0 +1,56 @@
+
+    <p-growl [value]="msgsPrincipal"></p-growl>
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <p-fileUpload name="file" url="{{urlUpload}}" (onBeforeSend)="onBeforeSend($event)" (onUpload)="onUpload($event)"
+                          multiple="multiple" accept="image/*" maxFileSize="1000000">
+                <template pTemplate type="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                    </ul>
+                </template>
+            </p-fileUpload>
+
+            <div style="float:right; padding-top: 11px; margin-bottom: -2px;">
+                <button type="button" pButton (click)="buscar()" icon="ui-icon-refresh" label="Refrescar"></button>
+            </div>
+        </div>
+
+
+        <div class="ui-g-12">
+            <p-dataTable #dt [value]="listaDto" [editable]="true" [paginator]="true" [rows]="10" [responsive]="true">
+                <header>
+                    Cargados
+                </header>
+
+                <p-column [style]="{'text-align':'left', 'width':'20%'}" field="nombre" [editable]="true" header="Nombre"></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'10%'}" field="extension" header="Extensión"></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'10%'}" field="peso" header="Peso (Kb)"></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'15%'}" field="fecha"  header="Fecha" [sortable]="true">
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>{{data[col.field] | date: 'dd/MM/yy HH:mm:ss'}}</span>
+                    </template>
+                </p-column>
+                <p-column [style]="{'text-align':'left', 'width':'20%'}" [editable]="true" field="comentario" header="Comentario"></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'20%'}" header="Acciones">
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <button pButton (click)="modificar(data)" icon="ui-icon-edit"></button>
+                        <button pButton (click)="descargar($event, opImage, opPdf, data)" icon="ui-icon-file-download"></button>
+                        <button pButton (click)="eliminar(data)" icon="ui-icon-clear"></button>
+                    </template>
+                </p-column>
+            </p-dataTable>
+
+            <p-overlayPanel #opImage [dismissable]="false" [showCloseIcon]="true">
+                <div style="margin: 0 auto; display: table;">
+                    <img [src]="urlFile | safeUrl" #imgOverlay/>
+                </div>
+            </p-overlayPanel>
+
+            <p-overlayPanel #opPdf [dismissable]="false" [showCloseIcon]="true">
+                <iframe width="100%" height="100%" [src]="urlFile | safeUrl" frameborder="0" allowfullscreen></iframe>
+            </p-overlayPanel>
+        </div>
+    </div>
+
+

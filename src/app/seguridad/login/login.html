@@ -1,0 +1,30 @@
+<div class="card login-panel ui-fluid">
+    <div class="ui-g">
+        <div class="ui-g-12" >
+            <img src="assets/layout/images/loginLogo.png" width="200">
+
+        </div>
+
+        <p-messages [value]="msgsPrincipal"></p-messages>
+        <div class="ui-g-12">
+            <span class="md-inputfield">
+                <input type="text" pInputText autocomplete="off" [(ngModel)]="user">
+                <label>Email</label>
+            </span>
+        </div>
+        <div class="ui-g-12">
+            <span class="md-inputfield">
+                <input type="password" pInputText autocomplete="off" [(ngModel)]="password">
+                <label>Constraseña</label>
+            </span>
+        </div>
+
+
+        <div class="ui-g-12">
+            <button type="button" pButton label="Ingresar" icon="ui-icon-person" (click)='login($event)'></button>
+            <button type="button" pButton label="Recuperar Contraseña" icon="ui-icon-help" class="secondary"></button>
+            <button type="button" pButton label="Registrarse" icon="ui-icon-queue" (click)='login($event)'></button>
+
+        </div>
+    </div>
+</div>

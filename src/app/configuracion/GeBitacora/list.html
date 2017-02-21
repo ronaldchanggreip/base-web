@@ -1,0 +1,21 @@
+<p-dialog header="Bitácora" [width]="widthDialog" [(visible)]="displayDialog" [responsive]="true" [modal]="true"
+           (onBeforeHide)='onBeforeHide($event)' (onBeforeShow)='onBeforeShow($event)'>
+    <div class="ui-g">
+
+        <div class="ui-g-12">
+
+            <p-growl [value]="msgsPrincipal"></p-growl>
+            <p-dataTable [value]="listaDto" [paginator]="true" [rows]="10" [responsive]="true">
+                <header>
+                    Movimientos
+                </header>
+
+                <p-column field="tipoMovimientoDesc" header="Movimiento" [sortable]="true"></p-column>
+                <p-column field="usuarioDto.nombre" header="Usuario"></p-column>
+                <p-column field="etapaDesc" header="Etapa"></p-column>
+                <p-column field="estadoDesc" header="Estado"></p-column>
+                <p-column field="fecha" header="Fecha" [sortable]="true"></p-column>
+            </p-dataTable>
+        </div>
+    </div>
+</p-dialog>

@@ -1,0 +1,142 @@
+<p-dialog header="Parametro" [width]="widthDialog" [(visible)]="displayDialog" [responsive]="true"  [modal]="true"
+    *ngIf="dto" (onBeforeHide)='onBeforeHide($event)' (onBeforeShow)='onBeforeShow($event)'>
+
+    <form [formGroup]="parametroForm" (ngSubmit)="save()">
+        <p-messages [value]="msgsPrincipal"></p-messages>
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+
+            <div class="ui-grid-row" *ngIf="accion==2">
+                <div class="ui-grid-col-2"><label for="id" style='font-weight: bold'>Id</label></div>
+                {{dto.id}}
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="nombre"  style='font-weight: bold'>Grupo *</label></div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown [options]="sitGruposParametro" formControlName="grupoDto" [style]="{'width':'100%'}"></p-dropdown>
+                    <control-messages [control]="parametroForm.controls['grupoDto']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="clave"  style='font-weight: bold'>Clave *</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="clave" formControlName="clave" pTooltip="Ingrese la clave" required/>
+                    <control-messages [control]="parametroForm.controls['clave']"></control-messages>
+                </div>
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="descripcion"  style='font-weight: bold'>Descripción *</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="descripcion" formControlName="descripcion" pTooltip="Ingrese la descripcion" required/>
+                    <control-messages [control]="parametroForm.controls['descripcion']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="descripcionCorta"  style='font-weight: bold'>Descripcion Corta</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="descripcionCorta" formControlName="descripcionCorta" pTooltip="Ingrese la descripcion corta" />
+                    <control-messages [control]="parametroForm.controls['descripcionCorta']"></control-messages>
+                </div>
+            </div>
+            <br>
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="tipoDato"  style='font-weight: bold'>Tipo Dato *</label></div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown [options]="sitTipoDatoParametro" formControlName="tipoDato" [style]="{'width':'100%'}"></p-dropdown>
+                    <control-messages [control]="parametroForm.controls['tipoDato']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="valor"  style='font-weight: bold'>Valor</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="valor" formControlName="valor" pTooltip="Ingrese un valor" />
+                    <control-messages [control]="parametroForm.controls['valor']"></control-messages>
+                </div>
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="codHomologacion"  style='font-weight: bold'>Cod. Homologacion</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="codHomologacion" formControlName="codHomologacion" pTooltip="Ingrese el codigo de homologación" />
+                    <control-messages [control]="parametroForm.controls['codHomologacion']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="codEstandar"  style='font-weight: bold'>Cod. Estandar</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="codEstandar" formControlName="codEstandar" pTooltip="Ingrese el codigo estandar" />
+                    <control-messages [control]="parametroForm.controls['codEstandar']"></control-messages>
+                </div>
+
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="estado"  style='font-weight: bold'>Estado *</label></div>
+                <div class="ui-grid-col-4">
+                    <p-checkbox binary="true" formControlName="estado"></p-checkbox>
+                    <control-messages [control]="parametroForm.controls['estado']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="indDefecto"  style='font-weight: bold'>Ind. Defecto *</label></div>
+                <div class="ui-grid-col-4">
+                    <p-checkbox binary="true" formControlName="indDefecto"></p-checkbox>
+                    <control-messages [control]="parametroForm.controls['indDefecto']"></control-messages>
+                </div>
+            </div>
+            <br>
+
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="comentario"  style='font-weight: bold'>Comentario</label></div>
+                <div class="ui-grid-col-10">
+                    <textarea rows="2" cols="30" pInputTextarea formControlName="comentario" pTooltip="Ingrese un comentario"></textarea>
+                    <control-messages [control]="parametroForm.controls['comentario']"></control-messages>
+                </div>
+                <br>
+            </div>
+            <br>
+        </div>
+        <p-accordion>
+            <p-accordionTab header="Auditoria del Registro" *ngIf="accion==2">
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Creacion: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioCreacionDto.nombre || ''}}</div>
+                    <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Modificación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioDto.nombre || ''}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Creación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.fechaCreacion | date:'dd/MM/yyyy hh:mm:ss'}}
+                    </div>
+                    <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Modificación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.fecha | date:'dd/MM/yyyy hh:mm:ss'}}
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Creacion: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.terminalCreacion}}
+                    </div>
+                    <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Modificación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.terminal}}
+                    </div>
+                </div>
+
+            </p-accordionTab>
+
+        </p-accordion>
+
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+
+                <button type="button" pButton icon="fa-close" (click)="close()" label="Cerrar"></button>
+                <button type="submit" pButton icon="fa-check" [disabled]="!parametroForm.valid" label="Guardar"></button>
+            </div>
+        </footer>
+    </form>
+
+</p-dialog>
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog>
