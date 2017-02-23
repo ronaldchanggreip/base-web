@@ -46,6 +46,7 @@ export class SeUsuarioFormComponent extends GeBaseComponent implements OnInit{
     public msgsPrincipal: Message[] = [];
     public isChangePassword: boolean = false;
     public visibleSocNego: boolean = false;
+    es: any;
 
     //Validaciones
     usuarioForm: FormGroup;
@@ -56,6 +57,15 @@ export class SeUsuarioFormComponent extends GeBaseComponent implements OnInit{
     }
 
     public ngOnInit(){
+        this.es = {
+            firstDayOfWeek: 1,
+            dayNames: [ "domingo","lunes","martes","miércoles","jueves","viernes","sábado" ],
+            dayNamesShort: [ "dom","lun","mar","mié","jue","vie","sáb" ],
+            dayNamesMin: [ "D","L","M","X","J","V","S" ],
+            monthNames: [ "enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre" ],
+            monthNamesShort: [ "ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic" ]
+        }
+
         this.widthDialog = window.innerWidth*this.configuration.appDialogMin;
         this.usuarioForm = this.fb.group({
             'nombre': new FormControl('' , Validators.compose([Validators.required, Validators.maxLength(100)])),
@@ -69,6 +79,7 @@ export class SeUsuarioFormComponent extends GeBaseComponent implements OnInit{
             'estado': new FormControl('', Validators.nullValidator),
             'comentario': new FormControl('', Validators.maxLength(4000)),
             'cambiarPassword': new FormControl('', Validators.nullValidator),
+            'fecVigencia': new FormControl(Validators.required),
 
             'tipoDocumentoDto': new FormControl('', Validators.required),
             'numDocumento': new FormControl('', Validators.compose([Validators.required, Validators.maxLength(20)])),
@@ -79,6 +90,7 @@ export class SeUsuarioFormComponent extends GeBaseComponent implements OnInit{
         });
 
         this.addGenericControlsNoObj(this.usuarioForm);
+        this.usuarioForm.reset();
     }
 
     //metodo para recuperar el objeto de la base de datos con el id
@@ -91,10 +103,11 @@ export class SeUsuarioFormComponent extends GeBaseComponent implements OnInit{
                         if(this.accion == 2 || this.accion == 4){
                             //Si es edicion asignamos los valores del dto al FormGroup
                             this.service.addValuesControls(this.usuarioForm, this.dto);
+                            this.defaultValuesEditForm();
                             this.changeTipoDocumento();
                             this.changeRol();
                             this.changeCambiarContrasena();
-                            this.defaultValuesEditForm();
+                            console.log(this.usuarioForm);
                         }
                     },
                     error => {
@@ -113,6 +126,7 @@ export class SeUsuarioFormComponent extends GeBaseComponent implements OnInit{
         if(this.accion == 1){
             //Si es nuevo reseteamos los valores del FormGroup
             this.usuarioForm.reset();
+            this.usuarioForm.controls["fecVigencia"].setValue(new Date());
             this.defaultValuesForm();
             this.isChangePassword = true;
         }else if (this.accion == 2){
@@ -150,16 +164,20 @@ export class SeUsuarioFormComponent extends GeBaseComponent implements OnInit{
     public changeRol(){
         this.visibleSocNego = false;
         if(this.usuarioForm.controls["rolDto"].value.id == this.geGenericConst.codRolWeb){
+            console.log("no es web!");
             this.usuarioForm.controls['tipoDocumentoDto'].setValidators(Validators.required);
             this.visibleSocNego = true;
         }else{
+            console.log("si es web!");
             this.usuarioForm.controls['tipoDocumentoDto'].setValidators(null);
+            this.usuarioForm.controls['numDocumento'].setValidators(null);
             this.usuarioForm.controls['nombres'].setValidators(null);
             this.usuarioForm.controls['apPaterno'].setValidators(null);
             this.usuarioForm.controls['apMaterno'].setValidators(null);
             this.usuarioForm.controls['razSocial'].setValidators(null);
         }
         this.usuarioForm.controls['tipoDocumentoDto'].updateValueAndValidity();
+        this.usuarioForm.controls['numDocumento'].updateValueAndValidity();
         this.usuarioForm.controls['nombres'].updateValueAndValidity();
         this.usuarioForm.controls['apPaterno'].updateValueAndValidity();
         this.usuarioForm.controls['apMaterno'].updateValueAndValidity();
@@ -175,12 +193,10 @@ export class SeUsuarioFormComponent extends GeBaseComponent implements OnInit{
         if(this.usuarioForm.controls['tipoDocumentoDto'].value){
             if(this.usuarioForm.controls['tipoDocumentoDto'].value.id == this.geGenericConst.paramTipoDocDni){
                 this.tipoDoc = "N";
-
                 this.usuarioForm.controls['nombres'].setValidators(Validators.required);
                 this.usuarioForm.controls['apPaterno'].setValidators(Validators.required);
                 this.usuarioForm.controls['apMaterno'].setValidators(Validators.required);
             }else if(this.usuarioForm.controls['tipoDocumentoDto'].value.id == this.geGenericConst.paramTipoDocRuc){
-                //console.log("RUC");
                 this.tipoDoc = "J";
                 this.usuarioForm.controls['razSocial'].setValidators(Validators.required)
             }
@@ -198,6 +214,7 @@ export class SeUsuarioFormComponent extends GeBaseComponent implements OnInit{
 
     public changeCambiarContrasena(){
         this.isChangePassword = this.usuarioForm.controls["cambiarPassword"].value;
+        console.log("isChangePassword : ",this.isChangePassword );
         this.usuarioForm.controls['contrasena'].setValidators(null);
         this.usuarioForm.controls['confirmContrasena'].setValidators(null);
         if(this.isChangePassword){

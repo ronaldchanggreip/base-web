@@ -46,13 +46,13 @@ export class SeUsuarioService extends GeBaseService {
         anyForm.controls["confirmEmail"].setValue("");
         anyForm.controls["indBloqueado"].setValue(dto.indBloqueado);
         anyForm.controls["estado"].setValue(dto.estado);
-        console.log("TIPO DE DOCUMENTO : ", dto.tipoDocumentoDto);
         anyForm.controls["tipoDocumentoDto"].setValue(dto.tipoDocumentoDto);
         anyForm.controls["numDocumento"].setValue(dto.numDocumento);
         anyForm.controls["nombres"].setValue(dto.nombres);
         anyForm.controls["apPaterno"].setValue(dto.apPaterno);
         anyForm.controls["apMaterno"].setValue(dto.apMaterno);
         anyForm.controls["razSocial"].setValue(dto.razSocial);
+        anyForm.controls["fecVigencia"].setValue(new Date(dto.fecVigencia));
         this.addGenericValuesConstrolsNoObj(anyForm, dto);
     }
 

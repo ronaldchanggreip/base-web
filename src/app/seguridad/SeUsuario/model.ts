@@ -25,4 +25,5 @@ export class SeUsuarioDto {
     public cambiarPassword: boolean;
     public confirmContrasena: string;
     public confirmEmail: string;
+    public eliminado: boolean;
 }

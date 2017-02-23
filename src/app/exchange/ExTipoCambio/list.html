@@ -1,0 +1,78 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+      
+            <p-growl [value]="msgsPrincipal"></p-growl>
+            <h1>Gestión de Tipo de Cambio</h1>
+             <div class="ui-helper-clearfix" style="width:100%">
+                 <label for="fFecha" style='font-weight: bold'>Fecha: </label>
+                 <p-calendar [(ngModel)]="dtoFilter.fechaVigencia" [locale]="es" [showTime]="false" dateFormat="dd/mm/yy"></p-calendar>
+
+                 <label for="fBanco" style='font-weight: bold'>Banco: </label>
+                 <p-dropdown id="fBanco" [style]="{'width':'250px'}" [options]="sitBanco" [(ngModel)]="dtoFilter.bancoDto"  ></p-dropdown>
+
+                 <label for="fMonOrigen" style='font-weight: bold'>Moneda origen: </label>
+                 <p-dropdown id="fMonOrigen" [style]="{'width':'250px'}" [options]="sitMoneda" [(ngModel)]="dtoFilter.monedaOrigenDto"  ></p-dropdown>
+
+                 <button  pButton icon="ui-icon-find-in-page"  (click)="buscar()" label="Buscar"></button>            
+            </div>    
+            <br>
+            <div class="ui-helper-clearfix" style="width:100%">
+                <button type="button" pButton icon="ui-icon-edit" style="float:right" (click)="editar()" label="Editar" *ngIf="activeBtnEditar==true"></button>
+                <button type="button" pButton icon="ui-icon-content-copy" style="float:right" (click)="clonar()" label="Clonar" *ngIf="activeBtnClonar==true"></button>
+                <button type="button" pButton icon="ui-icon-line-weight" style="float:right" (click)="bitacora()" label="Bitacora" *ngIf="activeBtnBitacora==true"></button>                
+                <button type="button" pButton icon="ui-icon-delete" style="float:right" (click)="eliminar()" label="Eliminar" *ngIf="activeBtnEliminar==true"></button>
+                <button type="button" pButton icon="ui-icon-add" style="float:right" (click)="nuevo()" label="Nuevo"></button>
+            </div>    
+            <p-dataTable #dt  [value]="listaDto" selectionMode="multiple"  [(selection)]="selectedDtos"  (onRowSelect)='onRowSelect($event)'
+                (onRowUnselect)='onRowUnselect($event)' (onHeaderCheckboxToggle) = 'onHeaderCheckboxToggle($event)'
+                [paginator]="true" [rows]="10" [responsive]="true">
+                <header>
+                    Lista de Tipos de Cambio
+                </header>
+                <p-column [style]="{'width':'40px', 'text-align':'center'}"  selectionMode="multiple"></p-column>
+
+                <p-column [style]="{'width':'10%', 'text-align':'center'}" field="fechaVigencia"  header="Fecha" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>{{data[col.field] | date: 'dd/MM/yy HH:mm:ss'}}</span>
+                    </template>
+                </p-column>
+                <!--
+                <p-column [style]="{'width':'10%', 'text-align':'center'}" field="tipoDesc" header="Tipo"></p-column>
+                -->
+                <p-column [style]="{'width':'20%', 'text-align':'left'}" field="bancoDto.descripcion" header="Banco" [sortable]="true"></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="monedaOrigenDto.nombre" header="Moneda origen" ></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="monedaDestinoDto.nombre" header="Moneda destino" ></p-column>
+                <!--
+                <p-column [style]="{'width':'10%', 'text-align':'center'}" field="factor" header="Factor" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>{{data[col.field] | number:'.6-6'}}</span>
+                    </template>
+                </p-column>
+                -->
+                <p-column [style]="{'width':'10%', 'text-align':'center'}" field="precioCompra" header="Compra" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>{{data[col.field] | number:'.6-6'}}</span>
+                    </template>
+                </p-column>
+                <p-column [style]="{'width':'10%', 'text-align':'center'}" field="precioVenta" header="Venta" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>{{data[col.field] | number:'.6-6'}}</span>
+                    </template>
+                </p-column>
+            </p-dataTable>
+      
+    </div>
+</div>
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog>
+
+<bitacoraList [registro]="id" [displayDialog]='displayBitaDialog' (respuesta)="respuestaBitacora($event)" [entidad]='entidad'></bitacoraList>
+
+<tipoCambioForm [dto]='dto' [displayDialog]='displayDialog' [accion]='accion' (respuesta)="respuesta($event)"></tipoCambioForm>
+
+<errorForm [dtoError]='dtoError' [displayDialogError]='displayDialogError' (respuesta)="respuestaError($event)"></errorForm>

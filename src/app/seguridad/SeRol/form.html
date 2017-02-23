@@ -11,12 +11,12 @@
                     </div>
                     <br>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-2"><label for="fnombre"  style='font-weight: bold'>Nombre</label></div>
+                        <div class="ui-grid-col-2"><label for="fnombre"  style='font-weight: bold'>Nombre * </label></div>
                         <div class="ui-grid-col-4">
                             <input pInputText id="fnombre" formControlName="nombre" pTooltip="Ingrese el Nombre"/>
                             <control-messages [control]="rolForm.controls['nombre']"></control-messages>
                         </div>
-                        <div class="ui-grid-col-2"><label for="fAdministrador" style='font-weight: bold'>Administrador</label></div>
+                        <div class="ui-grid-col-2"><label for="fAdministrador" style='font-weight: bold'>Administrador* </label></div>
                         <div class="ui-grid-col-4">
                             <p-checkbox binary="true" formControlName="indAdministrador"></p-checkbox>
                             <control-messages [control]="rolForm.controls['indAdministrador']"></control-messages>
@@ -24,19 +24,19 @@
                     </div>
                     <br>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-2"><label for="fSys" style='font-weight: bold'>System</label></div>
+                        <div class="ui-grid-col-2"><label for="fSys" style='font-weight: bold'>System * </label></div>
                         <div class="ui-grid-col-4">
                             <p-checkbox binary="true" formControlName="indSys"></p-checkbox>
                             <control-messages [control]="rolForm.controls['indSys']"></control-messages>
                         </div>
-                        <div class="ui-grid-col-2"><label for="fEstado" style='font-weight: bold'>Estado</label></div>
+                        <div class="ui-grid-col-2"><label for="fEstado" style='font-weight: bold'>Estado * </label></div>
                         <div class="ui-grid-col-4">
                             <p-dropdown id="fEstado" [options]="sitEstado" formControlName="estado" [style]="{'width':'100%'}"></p-dropdown>
                             <control-messages [control]="rolForm.controls['estado']"></control-messages>
                         </div>
                     </div>
                 </p-tabPanel>
-                <p-tabPanel header="Opciones">
+                <p-tabPanel header="Privilegios">
                     <p-tree [value]="tree" selectionMode="checkbox" (onNodeSelect)="nodeSelect($event)" [(selection)]="selectedTree"></p-tree>
                 </p-tabPanel>
             </p-tabView>

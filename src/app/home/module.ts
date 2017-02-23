@@ -66,6 +66,7 @@ import {ToolbarModule} from 'primeng/primeng';
 import {TooltipModule} from 'primeng/primeng';
 import {TreeModule} from 'primeng/primeng';
 import {TreeTableModule} from 'primeng/primeng';
+import {ExExchangeModule} from "../exchange/module";
 
 @NgModule({
         declarations: [
@@ -134,7 +135,8 @@ import {TreeTableModule} from 'primeng/primeng';
                 ToolbarModule,
                 TooltipModule,
                 TreeModule,
-                TreeTableModule
+                TreeTableModule,
+                ExExchangeModule
         ]
 
 })

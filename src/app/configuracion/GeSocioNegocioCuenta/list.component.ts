@@ -178,25 +178,41 @@ export class GeSocioNegocioCuentaListComponent extends GeBaseComponent implement
         });
     }
 
-    /**Evento principal para Eliminar */
+    //Evento para eliminar un registro o muchos registros
     public eliminar() {
+        this.accion = 3;
+        this.activarBotones();
 
+        //Muestra mensaje de confirmacion
         this.confirmationService.confirm({
             message: 'Está seguro que desea eliminar ' + this.selectedDtos.length + ' registros?',
             header: 'Confirmacion',
             accept: () => {
-                this.eliminarAlt();
+                var ids: number[] = [];
+                for(let obj of this.selectedDtos){
+                    ids.push(obj.id);
+                }
+                this.eliminarAlt(ids); //Invocamos el proceso que elimina invocando el servicio
             },
             reject: () => {
-
+                // no realiza nada
             }
         });
 
         this.accion = 6;
     }
 
-    public eliminarAlt() {
-        //this.log('Se confirma eliminacion');
+    //Evento que elimina todos los registros seleccionados
+    private eliminarAlt(ids: number[]) {
+        this.service
+            .deleteLogico(ids)
+            .subscribe(
+                (response: GeMensajeHttpDto) => {
+                    this.buscar();
+                    this.msgsPrincipal.push({ severity: 'success', summary: 'Mensaje de conformidad', detail: response.mensajeUsuario });
+                },
+                error => { this.mostrarError(error); }
+            );
     }
 
     /** Capturamos la respuesta del hijo (modal)*/

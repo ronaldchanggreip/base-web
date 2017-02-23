@@ -24,6 +24,16 @@ export class GeGenericConst {
 
     //Entidades
     public entSistSolicitud = 2007;
+    public entSistUsuario = 2003;
+    public entSistGrupoParametro = 1000;
+    public entSistParametro = 1001;
+    public entSistUbigeo = 1006;
+    public entSistRol = 2002;
+    public entSistSocioNegocio = 2005;
+    public entSistCuentaEmpresa = 2006;
+    public entSistTipoCambio = 2008;
+    public entSistMoneda = 1005;
+    public entSistSocNegoCuenta = 2009;
 
     //Codigos de error personalizados en las apis
     public codStatusOK: number = 200;

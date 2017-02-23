@@ -34,6 +34,7 @@ export class GeSocioNegocioListComponent extends GeBaseComponent implements OnIn
     public activeBtnBitacora: boolean = false;
     public activeBtnEliminar: boolean = false;
     public confirm: boolean = false;
+    public entidad: number = this.geGenericConst.entSistSocioNegocio;
     public id: number;
 
     constructor(router: Router, 
@@ -162,8 +163,7 @@ export class GeSocioNegocioListComponent extends GeBaseComponent implements OnIn
 
     /** Invocamos al modal de bitacora*/
     public bitacora() {
-        this.accion = 5;
-        this.displayDialog = true;
+        this.displayBitaDialog = true;
     }
 
     accConfirm(msg: string, header: string, icon: string) {
@@ -177,25 +177,41 @@ export class GeSocioNegocioListComponent extends GeBaseComponent implements OnIn
         });
     }
 
-    /**Evento principal para Eliminar */
+    //Evento para eliminar un registro o muchos registros
     public eliminar() {
+        this.accion = 3;
+        this.activarBotones();
 
+        //Muestra mensaje de confirmacion
         this.confirmationService.confirm({
             message: 'Está seguro que desea eliminar ' + this.selectedDtos.length + ' registros?',
             header: 'Confirmacion',
             accept: () => {
-                this.eliminarAlt();
+                var ids: number[] = [];
+                for(let obj of this.selectedDtos){
+                    ids.push(obj.id);
+                }
+                this.eliminarAlt(ids); //Invocamos el proceso que elimina invocando el servicio
             },
             reject: () => {
-
+                // no realiza nada
             }
         });
 
         this.accion = 6;
     }
 
-    public eliminarAlt() {
-        //this.log('Se confirma eliminacion');
+    //Evento que elimina todos los registros seleccionados
+    private eliminarAlt(ids: number[]) {
+        this.service
+            .deleteLogico(ids)
+            .subscribe(
+                (response: GeMensajeHttpDto) => {
+                    this.buscar();
+                    this.msgsPrincipal.push({ severity: 'success', summary: 'Mensaje de conformidad', detail: response.mensajeUsuario });
+                },
+                error => { this.mostrarError(error); }
+            );
     }
 
     /** Capturamos la respuesta del hijo (modal)*/

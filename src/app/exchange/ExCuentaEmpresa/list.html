@@ -1,0 +1,58 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+      
+            <p-growl [value]="msgsPrincipal"></p-growl>
+            <h1>Gestión de Cuenta de Empresa</h1>
+             <div class="ui-helper-clearfix" style="width:100%">
+
+                 <label for="fCuenta" style='font-weight: bold'>Cuenta: </label>
+                 <input pInputText id="fCuenta" [(ngModel)]="dtoFilter.cuenta" style="width: 15%" />
+
+                 <label for="fCuentaI" style='font-weight: bold'>Cuenta interbancaria: </label>
+                 <input pInputText id="fCuentaI" [(ngModel)]="dtoFilter.cuentaInter" style="width: 15%" />
+
+                 <label for="fBanco" style='font-weight: bold'>Banco: </label>
+                 <p-dropdown id="fBanco" [style]="{'width':'15%'}" [options]="sitBanco" [(ngModel)]="dtoFilter.bancoDto"  ></p-dropdown>
+                  
+                 <label for="fMoneda" style='font-weight: bold'>Moneda: </label>
+                 <p-dropdown id="fMoneda" [style]="{'width':'15%'}" [options]="sitMoneda" [(ngModel)]="dtoFilter.monedaDto"  ></p-dropdown>
+
+                 <button  pButton icon="ui-icon-find-in-page"  (click)="buscar()" label="Buscar"></button>            
+            </div>    
+            <br>
+            <div class="ui-helper-clearfix" style="width:100%">
+                <button type="button" pButton icon="ui-icon-edit" style="float:right" (click)="editar()" label="Editar" *ngIf="activeBtnEditar==true"></button>
+                <button type="button" pButton icon="ui-icon-content-copy" style="float:right" (click)="clonar()" label="Clonar" *ngIf="activeBtnClonar==true"></button>
+                <button type="button" pButton icon="ui-icon-line-weight" style="float:right" (click)="bitacora()" label="Bitacora" *ngIf="activeBtnBitacora==true"></button>                
+                <button type="button" pButton icon="ui-icon-delete" style="float:right" (click)="eliminar()" label="Eliminar" *ngIf="activeBtnEliminar==true"></button>
+                <button type="button" pButton icon="ui-icon-add" style="float:right" (click)="nuevo()" label="Nuevo"></button>
+            </div>    
+            <p-dataTable #dt [value]="listaDto" selectionMode="multiple"  [(selection)]="selectedDtos"  (onRowSelect)='onRowSelect($event)' 
+                (onRowUnselect)='onRowUnselect($event)' (onHeaderCheckboxToggle) = 'onHeaderCheckboxToggle($event)'
+                [paginator]="true" [rows]="10" [responsive]="true">
+                <header>
+                    Lista de Cuentas de Empresa
+                </header>
+                <p-column [style]="{'width':'40px', 'text-align':'center'}"  selectionMode="multiple"></p-column>
+
+                <p-column [style]="{'width':'70px', 'text-align':'center'}" field="id" header="Id"></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="bancoDto.descripcion" header="Banco" [sortable]="true"></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="monedaDto.nombre" header="Moneda" ></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="cuenta" header="Cuenta" ></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="cuentaInter" header="Cuenta Inter." ></p-column>
+                <p-column [style]="{'width':'10%', 'text-align':'center'}" field="estadoDesc" header="Estado" ></p-column>
+            </p-dataTable>
+      
+    </div>
+</div>
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog> 
+
+<cuentaEmpresaForm [dto]='dto' [displayDialog]='displayDialog' [accion]='accion' (respuesta)="respuesta($event)"></cuentaEmpresaForm>
+
+<errorForm [dtoError]='dtoError' [displayDialogError]='displayDialogError' (respuesta)="respuestaError($event)"></errorForm>

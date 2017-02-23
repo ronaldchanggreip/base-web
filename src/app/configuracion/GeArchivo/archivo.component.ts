@@ -25,7 +25,6 @@ import { GeFiltroDto, GeFiltroDetaDto, GeFiltroOrderDto } from '../../common/gen
 export class GeArchivoListComponent extends GeBaseComponent implements  OnInit{
     @Input()
     entidad:number = 0;
-
     @Input()
     registro:number;
 

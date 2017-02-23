@@ -29,6 +29,7 @@ export class SeRolListComponent extends GeBaseComponent implements OnInit{
     public activeBtnEditar: boolean = false;
     public activeBtnBitacora: boolean = false;
     public activeBtnEliminar: boolean = false;
+    public entidad: number = this.geGenericConst.entSistRol;
     public id: number;
 
     constructor(router: Router, private service: SeRolService,
@@ -134,8 +135,7 @@ export class SeRolListComponent extends GeBaseComponent implements OnInit{
 
     /** Invocamos al modal de bitacora*/
     public bitacora() {
-        this.accion = 5;
-        this.displayDialog = true;
+        this.displayBitaDialog = true;
     }
 
     /** Invocamos al formulario modal hijo  para editar*/
@@ -144,23 +144,41 @@ export class SeRolListComponent extends GeBaseComponent implements OnInit{
         this.displayDialog = true;
     }
 
-    /**Evento principal para Eliminar */
+    //Evento para eliminar un registro o muchos registros
     public eliminar() {
+        this.accion = 3;
+        this.activarBotones();
+
+        //Muestra mensaje de confirmacion
         this.confirmationService.confirm({
-            message: 'Está seguro que desea eliminar estos ' + this.selectedDtos.length + ' registros?',
+            message: 'Está seguro que desea eliminar ' + this.selectedDtos.length + ' registros?',
             header: 'Confirmacion',
             accept: () => {
-                this.eliminarAlt();
+                var ids: number[] = [];
+                for(let obj of this.selectedDtos){
+                    ids.push(obj.id);
+                }
+                this.eliminarAlt(ids); //Invocamos el proceso que elimina invocando el servicio
             },
             reject: () => {
-
+                // no realiza nada
             }
         });
+
         this.accion = 6;
     }
 
-    public eliminarAlt() {
-        //this.log('Se confirma eliminacion');
+    //Evento que elimina todos los registros seleccionados
+    private eliminarAlt(ids: number[]) {
+        this.service
+            .deleteLogico(ids)
+            .subscribe(
+                (response: GeMensajeHttpDto) => {
+                    this.buscar();
+                    this.msgsPrincipal.push({ severity: 'success', summary: 'Mensaje de conformidad', detail: response.mensajeUsuario });
+                },
+                error => { this.mostrarError(error); }
+            );
     }
 
     /** Capturamos la respuesta del hijo (modal)*/

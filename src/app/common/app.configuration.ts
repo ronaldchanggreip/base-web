@@ -9,14 +9,14 @@ export class AppConfiguration implements OnInit {
     serverIp:string = '127.0.0.1';
     serverPort:string = '9082';
 
-    baseUrl: string = "http://"+this.serverIp+":"+this.serverPort+"/macpo-core/api/"; //9082
+    baseUrl: string = "http://"+this.serverIp+":"+this.serverPort+"/base-core/api/"; //9082
     //baseUrl: string = "https://"+this.serverIp+"/exchange-core/api/"; //9082
     //baseUrl: string = "http://92.222.67.53:8080/exchange-core/api/";
     serverIpSeguridad:string = '127.0.0.1';
     serverPortSeguridad:string = '8081';
-    baseUrlSecurity: string = "http://"+this.serverIpSeguridad+":"+this.serverPortSeguridad+"/macpo-security/oauth/"; //8081
+    baseUrlSecurity: string = "http://"+this.serverIpSeguridad+":"+this.serverPortSeguridad+"/base-security/oauth/"; //8081
     //baseUrlSecurity: string = "https://"+this.serverIpSeguridad+"/exchange-security/oauth/"; //8081
-    title: string = "Exchange";
+    title: string = "Base Project";
 
     headers: Headers = new Headers();
     headersSecurity: Headers = new Headers();
@@ -26,7 +26,7 @@ export class AppConfiguration implements OnInit {
 
     appDialogMin:number = 0.8;
 
-    infoSisAppVersion:string = "1.02 Beta";
+    infoSisAppVersion:string = "1.00 Beta";
 
     idApp: string = 'exchangeWeb';
     claveApp: string = 'monaco';

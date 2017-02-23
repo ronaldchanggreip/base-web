@@ -1,7 +1,7 @@
 <div class="ui-g">
     <div class="ui-g-12">
         <p-growl [value]="msgsPrincipal"></p-growl>
-        <h1>Perfil</h1>
+        <h1>Mi Perfil de Usuario</h1>
 
         <p-tabView>
             <p-tabPanel header="Datos del Usuario">
@@ -30,7 +30,7 @@
                             {{dto.login}}
                         </div>
 
-                        <div class="ui-grid-col-2"><label for="fBloqueado" style='font-weight: bold'>¿Bloqueado?</label></div>
+                        <div class="ui-grid-col-2"><label for="fBloqueado" style='font-weight: bold'>Bloqueado</label></div>
                         {{dto.indBloqueado | GeSiNoPipe}}
                     </div>
                     <br>
@@ -41,9 +41,9 @@
                             <control-messages [control]="usuarioForm.controls['email']"></control-messages>
                         </div>
 
-                        <div class="ui-grid-col-2"><label for="fEstado" style='font-weight: bold'>Estado</label></div>
+                        <div class="ui-grid-col-2"><label for="fEstado" style='font-weight: bold'>Activo</label></div>
                         <div class="ui-grid-col-4">
-                            {{dto.estado | GeActivoInactivo}}
+                            {{dto.estado | GeSiNoPipe}}
                         </div>
                     </div>
 

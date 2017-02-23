@@ -28,6 +28,7 @@ export class GeParametroListComponent extends GeBaseComponent implements OnInit 
     public accion: number = 0; // accion a realizar
     public listaDto: GeParametroDto[]; //lista o arreglo de Dtos para mostrar en la grilla
     public selectedDtos: GeParametroDto[] = []; //lista o arreglo para almacenar los registros seleccionados de la grilla
+    public entidad: number = this.geGenericConst.entSistParametro;
 
     public dto: GeParametroDto; //dto para el formulario
     public displayDialog: boolean; //flag para mostrar o ocultar el formulario de la entidad
@@ -39,6 +40,7 @@ export class GeParametroListComponent extends GeBaseComponent implements OnInit 
     public activeBtnBitacora: boolean = false; //variable para mostrar o ocultar el boton Bitacora
     public activeBtnEliminar: boolean = false; //variable para mostrar o ocultar el boton Eliminar
     public confirm: boolean = false; //variable para almacenar el valor del mensaje de confirmacion
+    public id: number;
 
     //Constructor del componente; en este se injectan todos los servicios necesarios
     constructor(router: Router,
@@ -114,6 +116,7 @@ export class GeParametroListComponent extends GeBaseComponent implements OnInit 
         } else if (this.selectedDtos.length == 1) {//Si la lista que contiene los registros seleccionados tiene 01 registro
             for (let x of this.selectedDtos) {
                 this.dto = x;
+                this.id = x.id;
             }
 
             this.activeBtnClonar = true;
@@ -173,9 +176,7 @@ export class GeParametroListComponent extends GeBaseComponent implements OnInit 
 
     //Mostramos el formulario para crear una bitacora entidad
     public bitacora() {
-        this.accion = 5;
-        this.displayDialog = true;
-        this.activarBotones();
+        this.displayBitaDialog = true;
     }
 
     //Evento para eliminar un registro o muchos registros
@@ -188,7 +189,11 @@ export class GeParametroListComponent extends GeBaseComponent implements OnInit 
             message: 'Está seguro que desea eliminar ' + this.selectedDtos.length + ' registros?',
             header: 'Confirmacion',
             accept: () => {
-                this.eliminarAlt(); //Invocamos el proceso que elimina invocando el servicio
+                var ids: number[] = [];
+                for(let obj of this.selectedDtos){
+                    ids.push(obj.id);
+                }
+                this.eliminarAlt(ids); //Invocamos el proceso que elimina invocando el servicio
             },
             reject: () => {
                 // no realiza nada
@@ -199,16 +204,16 @@ export class GeParametroListComponent extends GeBaseComponent implements OnInit 
     }
 
     //Evento que elimina todos los registros seleccionados
-    private eliminarAlt() {
-        for (let entry of this.selectedDtos) {
-            this.service
-                .delete(entry)
-                .subscribe(
-                (response: GeParametroDto) => { },
-                error => { this.mostrarError(error); }
-                );
-        }
-
+    private eliminarAlt(ids: number[]) {
+        this.service
+            .deleteLogico(ids)
+            .subscribe(
+            (response: GeMensajeHttpDto) => {
+                this.buscar();
+                this.msgsPrincipal.push({ severity: 'success', summary: 'Mensaje de conformidad', detail: response.mensajeUsuario });
+            },
+            error => { this.mostrarError(error); }
+            );
     }
 
     //Evento para recuperar la respuesta del Formulario Hijo 

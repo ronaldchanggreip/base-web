@@ -58,6 +58,8 @@
     </footer>
 </p-confirmDialog>
 
+<bitacoraList [registro]="id" [displayDialog]='displayBitaDialog' (respuesta)="respuestaBitacora($event)" [entidad]='entidad'></bitacoraList>
+
 <rolForm [dto]='dto' [displayDialog]='displayDialog' [accion]='accion' (respuesta)="respuesta($event)"></rolForm>
 
 <errorForm [dtoError]='dtoError' [displayDialogError]='displayDialogError' (respuesta)="respuestaError($event)"></errorForm>

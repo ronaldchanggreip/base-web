@@ -9,5 +9,4 @@ export class GeMonedaDto extends GeGenericDto{
     public simbolo:string;
     public estado:boolean = false;
     public paisDto:GeUbigeoDto;
-
 }

@@ -18,5 +18,4 @@ export class GeParametroDto extends GeGenericDto{
     public estado:boolean;
     public estadoDesc:string;
     public grupoDto:GeGrupoParametroDto;
-
 }

@@ -1,6 +1,118 @@
 <div class="ui-g dashboard">
 
-DASHBOARD MACPO
+    <div class="ui-g-12 ui-md-3">
+        <div class="card overview">
+            <div class="overview-content clearfix">
+                <span class="overview-title" style="color: purple; font-weight: bold">Compra de Dólares</span>
+                <span class="overview-badge">Soles (S/)</span>
+                <span class="overview-detail" *ngIf="tcDolares!=null" style="font-weight: bold">{{tcDolares.precioCompra  | number:'.4-4'}}</span>
+                <span class="overview-detail"  *ngIf="tcDolares==null" style="color: red; font-weight: bold">No Definido</span>
+            </div>
+            <div class="overview-footer">
+                <a href="#" (click)="calComprarDolares()" class="ripplelink">
+                    <img src="assets/layout/images/dashboard/usdCompra.png" style="width: 100%; height: 100%" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-g-12 ui-md-3">
+        <div class="card overview">
+            <div class="overview-content clearfix">
+                <span class="overview-title" style="color: darkblue; font-weight: bold">Venta de Dólares</span>
+                <span class="overview-badge">Soles (S/)</span>
+                <span class="overview-detail" *ngIf="tcDolares!=null"  style="font-weight: bold">{{tcDolares.precioVenta | number:'.4-4'}}</span>
+                <span class="overview-detail" *ngIf="tcDolares==null"  style="color: red; font-weight: bold">No Definido</span>
+            </div>
+            <div class="overview-footer">
+                <a href="#" (click)="calVentaDolares()" class="ripplelink">
+                    <img src="assets/layout/images/dashboard/usdVenta.png" style="width: 100%; height: 100%" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ui-g-12 ui-md-3">
+        <div class="card overview">
+            <div class="overview-content clearfix">
+                <span class="overview-title" style="color: darkgreen; font-weight: bold">Compra de Euros</span>
+                <span class="overview-badge">Soles (S/)</span>
+                <span class="overview-detail" *ngIf="tcEuros!=null" style="font-weight: bold">{{tcEuros.precioCompra | number:'.4-4'}}</span>
+                <span class="overview-detail" *ngIf="tcEuros==null" style="color: red; font-weight: bold">No Definido</span>
+            </div>
+            <div class="overview-footer">
+                <a href="#" (click)="calComprarEuros()" class="ripplelink">
+                    <img src="assets/layout/images/dashboard/eurCompra.png" style="width: 100%; height: 100%" />
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-md-3">
+        <div class="card overview">
+            <div class="overview-content clearfix">
+                <span class="overview-title" style="color: #AD1457; font-weight: bold">Venta de Euros</span>
+                <span class="overview-badge">Soles (S/)</span>
+                <span class="overview-detail" *ngIf="tcEuros!=null" style="font-weight: bold">{{tcEuros.precioVenta | number:'.4-4'}}</span>
+                <span class="overview-detail" *ngIf="tcEuros==null" style="color: red; font-weight: bold">No Definido</span>
+            </div>
+            <div class="overview-footer">
+                <a href="#" (click)="calVentaEuros()" class="ripplelink">
+                    <img src="assets/layout/images/dashboard/eurVenta.png" style="width: 100%; height: 100%" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-g-12 ui-lg-6 contacts" *ngIf="tcDolares != null">
+        <p-panel header="DÓLARES">
+            <p-dataTable #dt  [value]="tcsDolares"
+                         [responsive]="true">
+                <p-column [style]="{'width':'60%', 'text-align':'left'}" field="bancoDto.descripcion" header="Banco/Entidad" ></p-column>
+
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="precioCompra" header="Compra" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>S/ {{data.precioCompra | number:'.4-4'}} ({{data.precioCompraDif | number:'.4-4'}})</span>
+                    </template>
+                </p-column>
+
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="precioVenta" header="Venta" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>S/ {{data.precioVenta | number:'.4-4'}} (-{{data.precioVentaDif | number:'.4-4'}})</span>
+                    </template>
+                </p-column>
+            </p-dataTable>
+        </p-panel>
+
+    </div>
+
+    <div class="ui-g-12 ui-lg-6 contacts" *ngIf="tcEuros!=null">
+        <p-panel header="EUROS">
+            <p-dataTable #dt  [value]="tcsEuros"
+                         [responsive]="true">
+                <p-column [style]="{'width':'60%', 'text-align':'left'}" field="bancoDto.descripcion" header="Banco/Entidad" ></p-column>
+
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="precioCompra" header="Compra" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>S/ {{data.precioCompra | number:'.4-4'}} ({{data.precioCompraDif | number:'.4-4'}})</span>
+                    </template>
+                </p-column>
+
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="precioVenta" header="Venta" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>S/ {{data.precioVenta | number:'.4-4'}} (-{{data.precioVentaDif | number:'.4-4'}})</span>
+                    </template>
+                </p-column>
+
+            </p-dataTable>
+        </p-panel>
+
+    </div>
+
 
 </div>
 
+
+<calculadora [tipoCambioDto]="dlgCalculadoraTipoCambioDto" [tipo]="dlgCalculadoraTipo" [displayDialog]="dlgCaluladoraDisplay"
+             [moneda]="dlgCalculadoraMoneda"
+             (respuesta)="dlgCalculadoraRespuesta($event)"></calculadora>

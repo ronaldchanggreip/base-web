@@ -15,7 +15,6 @@ import {GeSocioNegocioCuentaListComponent} from './GeSocioNegocioCuenta/list.com
 import {GeBitacoraListComponent} from './GeBitacora/bitacora.component'
 import {GeArchivoListComponent} from './GeArchivo/archivo.component'
 
-
 import {CommonModule}   from '@angular/common';
 import {GeGenericModule} from '../generic/module';
 

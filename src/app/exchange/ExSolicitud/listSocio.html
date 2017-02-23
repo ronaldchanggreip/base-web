@@ -1,0 +1,74 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+      
+            <p-growl [value]="msgsPrincipal"></p-growl>
+            <h1>Gestión de Solicitudes del Cliente</h1>
+             <div class="ui-helper-clearfix" style="width:100%">
+                 <label  style='font-weight: bold'>Id: </label>
+                 <input pInputText id="fId" [(ngModel)]="dtoFilter.id" style="width: 5%" />
+
+                 <label  style='font-weight: bold'>Etapa: </label>
+                 <p-dropdown [options]="sitEtapa" [style]="{'width':'15%'}" [(ngModel)]="dtoFilter.etapa"  ></p-dropdown>
+
+                 <label  style='font-weight: bold'>Estado: </label>
+                 <p-dropdown [options]="sitEstado" [style]="{'width':'15%'}" [(ngModel)]="dtoFilter.estado"  ></p-dropdown>
+              
+                 <button  pButton icon="ui-icon-find-in-page"  (click)="buscar()" label="Buscar"></button>            
+            </div>    
+            <br>
+            <div class="ui-helper-clearfix" style="width:100%">
+                <button type="button" pButton icon="ui-icon-edit" style="float:right" (click)="editar()" label="Editar" *ngIf="activeBtnEditar==true"></button>
+                <button type="button" pButton icon="ui-icon-content-copy" style="float:right" (click)="clonar()" label="Clonar" *ngIf="activeBtnClonar==true"></button>
+                <button type="button" pButton icon="ui-icon-line-weight" style="float:right" (click)="bitacora()" label="Bitacora" *ngIf="activeBtnBitacora==true"></button>
+                <button type="button" pButton icon="ui-icon-report-problem" *ngIf="activeBtnAnular" style="float:right" (click)="formAnularSolicitudes()" label="Anular"></button>
+                <button type="button" pButton icon="ui-icon-add" style="float:right" (click)="nuevo()" label="Nuevo"></button>
+            </div>    
+            <p-dataTable #dt [value]="listaDto" selectionMode="multiple"  [(selection)]="selectedDtos"  (onRowSelect)='onRowSelect($event)' 
+                (onRowUnselect)='onRowUnselect($event)' (onHeaderCheckboxToggle) = 'onHeaderCheckboxToggle($event)'
+                [paginator]="true" [rows]="10" [responsive]="true">
+                <header>
+                    Lista de Solicitudes
+                </header>
+                <p-column [style]="{'width':'40px', 'text-align':'center'}"  selectionMode="multiple"></p-column>
+                
+                <p-column [style]="{'width':'70px', 'text-align':'center'}" field="id" header="Id"></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'15%'}" field="socioNegocioDto.nombreCompleto" header="Socio Negocio"></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'15%'}" field="transaccionDesc" header="Transacción"></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'15%'}" field="monedaOrigenDto.nombre" header="Moneda origen" ></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'15%'}" field="importeOrigen" header="Importe origen" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>{{data[col.field] | number:'.2-2'}}</span>
+                    </template>
+                </p-column>
+
+                <p-column [style]="{'text-align':'center', 'width':'15%'}" header="Tipo de cambio" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>{{data.transaccion == 'C' ? data.tipoCambioDto.precioCompra : data.tipoCambioDto.precioVenta  | number:'.6-6'}}</span>
+                    </template>
+                </p-column>
+                <p-column [style]="{'text-align':'center', 'width':'15%'}" field="monedaDestinoDto.nombre" header="Moneda destino" ></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'15%'}" field="importeDestino" header="Importe destino" >
+                    <template let-col let-data="rowData" pTemplate="body">
+                        <span>{{data[col.field] | number:'.2-2'}}</span>
+                    </template>
+                </p-column>
+                <p-column [style]="{'text-align':'center', 'width':'10%'}" field="etapaDesc" header="Etapa" ></p-column>
+                <p-column [style]="{'text-align':'center', 'width':'10%'}" field="estadoDesc" header="Estado" ></p-column>
+
+            </p-dataTable>
+      
+    </div>
+</div>
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog>
+
+<bitacoraList [registro]="id" [displayDialog]='displayBitaDialog' (respuesta)="respuestaBitacora($event)" [entidad]='entidad'></bitacoraList>
+
+<solicitudSocioForm [dto]='dto' [displayDialog]='displayDialog' [accion]='accion' (respuesta)="respuesta($event)"></solicitudSocioForm>
+
+<errorForm [dtoError]='dtoError' [displayDialogError]='displayDialogError' (respuesta)="respuestaError($event)"></errorForm>

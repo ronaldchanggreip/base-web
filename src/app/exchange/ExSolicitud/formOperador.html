@@ -1,0 +1,195 @@
+<p-dialog header="Transacción"  [(visible)]="displayDialog" [width]="widthDialog" [responsive]="true" [modal]="true"
+          *ngIf="dto" (onBeforeHide)='onBeforeHide($event)' (onBeforeShow)='onBeforeShow($event)'>
+    <p-tabView>
+        <p-tabPanel header="Datos Generales">
+            <form [formGroup]="solicitudSocioForm" (ngSubmit)="save()">
+                <p-messages [value]="msgsPrincipal"></p-messages>
+                <div class="ui-grid ui-grid-responsive ui-fluid">
+                    <p-fieldset legend="Transacción">
+                        <div class="ui-grid-row" *ngIf="accion == 2">
+                            <div class="ui-grid-col-2"><label  style='font-weight: bold'>Id</label></div>
+                            <div class="ui-grid-col-4">
+                                {{dto.id}}
+                            </div>
+                            <div class="ui-grid-col-2"><label style='font-weight: bold'>Etapa/Estado</label></div>
+                            <div class="ui-grid-col-4">
+                                {{dto.etapaDesc}}/{{dto.estadoDesc}}
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label style='font-weight: bold'>Socio Negocio *</label></div>
+                            <div class="ui-grid-col-10">
+                                <p-autoComplete formControlName="socioNegocioDto" (onSelect)="changeSociNegocio()" (onUnselect)="unSelectSocioNegocio()" [disabled]="false" [suggestions]="filteredSocNegocio" (completeMethod)="filterSocNegocio($event)" field="nombreCompleto" [size]="30"
+                                                placeholder="por nombre o núm doc..." [minLength]="3"></p-autoComplete>
+                                <control-messages [control]="solicitudSocioForm.controls['socioNegocioDto']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fTransacc" style='font-weight: bold'>Transacción *</label></div>
+                            <div class="ui-grid-col-4">
+                                <p-dropdown id="fTransacc" (onChange)="changeTransaccion()" [options]="sitTipoTransaccion" formControlName="transaccion" [style]="{'width':'100%'}"></p-dropdown>
+                                <control-messages [control]="solicitudSocioForm.controls['transaccion']"></control-messages>
+                            </div>
+                            <div class="ui-grid-col-2"><label for="fTipoCambio" style='font-weight: bold'>Tipo de cambio *</label></div>
+                            <div class="ui-grid-col-4" style="font-size: 25px; color: red; font-weight: bold;">
+                                {{valorTC || ""}}
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fImpO" style='font-weight: bold'>Importe origen *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fImpO" formControlName="importeOrigen" (blur)="onBlurImpOrigen()" pTooltip="Importe origen"/>
+                                <control-messages [control]="solicitudSocioForm.controls['importeOrigen']"></control-messages>
+                            </div>
+                            <div class="ui-grid-col-2"><label for="fImpD" style='font-weight: bold'>Importe destino *</label></div>
+                            <div class="ui-grid-col-4" style="font-size: 25px; color: green; font-weight: bold;">
+                                {{impDestino | number:'.2-2'}}
+                            </div>
+                        </div>
+                        <br>
+                    </p-fieldset>
+                    <br>
+                    <p-fieldset legend="Transferencia inicial">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fBancoO" style='font-weight: bold'>Banco *</label></div>
+                            <div class="ui-grid-col-4">
+                                <p-dropdown id="fBancoO" [options]="sitBanco" (onChange)="changeBancoOrigen()" formControlName="bancoOrigenDto" [style]="{'width':'100%'}"></p-dropdown>
+                                <control-messages [control]="solicitudSocioForm.controls['bancoOrigenDto']"></control-messages>
+                            </div>
+                            <div class="ui-grid-col-2"><label for="fMonedaO" style='font-weight: bold'>Moneda *</label></div>
+                            <div class="ui-grid-col-4">
+                                <p-dropdown id="fMonedaO" [options]="sitMoneda" (onChange)="changeMonedaOrigen()" formControlName="monedaOrigenDto" [style]="{'width':'100%'}"></p-dropdown>
+                                <control-messages [control]="solicitudSocioForm.controls['monedaOrigenDto']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fCuentEmpO" style='font-weight: bold'>Cuenta Empresa *</label></div>
+                            <div class="ui-grid-col-10">
+                                <p-dropdown id="fCuentEmpO" [options]="sitCuentaEmp" formControlName="cEmpOrigenDto" [style]="{'width':'100%'}"></p-dropdown>
+                                <control-messages [control]="solicitudSocioForm.controls['cEmpOrigenDto']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fNumVoucher" style='font-weight: bold'># Voucher *</label></div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="fNumVoucher" formControlName="numVoucherOrigen" pTooltip="Número de voucher"/>
+                                <control-messages [control]="solicitudSocioForm.controls['numVoucherOrigen']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                    </p-fieldset>
+                    <br>
+                    <p-fieldset legend="Transferencia final Exchange" *ngIf="flagInfoEjecutar">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fCuentEmpD" style='font-weight: bold'>Cuenta *</label></div>
+                            <div class="ui-grid-col-10">
+                                {{cuentaDestinoEjecutada || ""}}
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fNumVoucherD" style='font-weight: bold'># Voucher *</label></div>
+                            <div class="ui-grid-col-4">
+                                {{dto.numVoucherDestino}}
+                            </div>
+                        </div>
+                    </p-fieldset>
+                    <br>
+                    <p-fieldset legend="Transferencia final Cliente">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fBancoD" style='font-weight: bold'>Banco *</label></div>
+                            <div class="ui-grid-col-4">
+                                <p-dropdown id="fBancoD" [options]="sitBanco" (onChange)="changeBancoDestino()" formControlName="bancoDestinoDto" [style]="{'width':'100%'}"></p-dropdown>
+                                <control-messages [control]="solicitudSocioForm.controls['bancoDestinoDto']"></control-messages>
+                            </div>
+                            <div class="ui-grid-col-2"><label for="fMonedaD" style='font-weight: bold'>Moneda *</label></div>
+                            <div class="ui-grid-col-4">
+                                <p-dropdown id="fMonedaD" [options]="sitMoneda" (onChange)="changeMonedaDestino()" formControlName="monedaDestinoDto" [style]="{'width':'100%'}"></p-dropdown>
+                                <control-messages [control]="solicitudSocioForm.controls['monedaDestinoDto']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fCuentcliD" style='font-weight: bold'>Cuenta del cliente *</label></div>
+                            <div class="ui-grid-col-10">
+                                <p-dropdown id="fCuentcliD" [options]="sitCuentaSocio" formControlName="cBancariaDestinoDto" [style]="{'width':'100%'}"></p-dropdown>
+                                <control-messages [control]="solicitudSocioForm.controls['cBancariaDestinoDto']"></control-messages>
+                            </div>
+                        </div>
+                        <br>
+                    </p-fieldset>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label  style='font-weight: bold'>Comentario</label></div>
+                        <div class="ui-grid-col-10">
+                            <textarea rows="2" cols="30" pInputTextarea formControlName="comentario" pTooltip="Ingrese un comentario"></textarea>
+                            <control-messages [control]="solicitudSocioForm.controls['comentario']"></control-messages>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <br>
+                <br>
+
+                <p-accordion>
+                    <p-accordionTab header="Auditoria del Registro" *ngIf="accion==2">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Creacion: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioCreacionDto.nombre || ''}}</div>
+                            <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Modificación: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioDto.nombre || ''}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Creación: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>
+                                {{dto.fechaCreacion | date:'dd/MM/yyyy hh:mm:ss'}}
+                            </div>
+                            <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Modificación: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>
+                                {{dto.fecha | date:'dd/MM/yyyy hh:mm:ss'}}
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Creacion: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>
+                                {{dto.terminalCreacion}}
+                            </div>
+                            <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Modificación: </label></div>
+                            <div class="ui-grid-col-4" style='font-size:12px'>
+                                {{dto.terminal}}
+                            </div>
+                        </div>
+                    </p-accordionTab>
+
+                </p-accordion>
+
+                <footer>
+                    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                        <button type="button" pButton icon="fa-close" (click)="close()" label="Cerrar"></button>
+                        <button type="submit" pButton icon="ui-icon-save" *ngIf="flagBtnGuardar" [disabled]="!solicitudSocioForm.valid" label="Guardar"></button>
+                        <button type="button" pButton icon="ui-icon-report-problem" *ngIf="flagBtnAnular" (click)="formAnularSolicitud()" label="Anular"></button>
+                        <button type="button" pButton icon="ui-icon-report-problem" *ngIf="flagAbortar" (click)="formAbortarSolicitud()" label="Abortar"></button>
+                        <button type="button" pButton icon="ui-icon-new-releases" *ngIf="flagBtnObservar" (click)="formObservarSolicitud()" label="Observar"></button>
+                        <button type="button" pButton icon="fa-check" *ngIf="flagBtnRevisar" (click)="formRevisarSolicitud()" label="Revisada"></button>
+                    </div>
+                </footer>
+            </form>
+        </p-tabPanel>
+        <p-tabPanel header="Archivos" *ngIf="accion==2">
+            <archivoList [registro]="dto.id" [entidad]='entidad'></archivoList>
+        </p-tabPanel>
+    </p-tabView>
+</p-dialog>
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog>

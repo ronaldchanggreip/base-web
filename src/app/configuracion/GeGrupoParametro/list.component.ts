@@ -33,6 +33,7 @@ export class GeGrupoParametroListComponent extends GeBaseComponent implements On
     public activeBtnEditar: boolean = false;
     public activeBtnBitacora: boolean = false;
     public activeBtnEliminar: boolean = false;
+    public entidad: number = this.geGenericConst.entSistGrupoParametro;
     public confirm: boolean = false;
     public id: number;
 
@@ -172,8 +173,7 @@ export class GeGrupoParametroListComponent extends GeBaseComponent implements On
 
     /** Invocamos al modal de bitacora*/
     public bitacora() {
-        this.accion = 5;
-        this.displayDialog = true;
+        this.displayBitaDialog = true;
     }
 
     accConfirm(msg: string, header: string, icon: string) {

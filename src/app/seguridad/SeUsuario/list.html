@@ -9,6 +9,8 @@
             <input pInputText id="fId" style="width: 5%" [(ngModel)]="dtoFilter.id" />
             <label for="fLogin" style='font-weight: bold'>Login: </label>
             <input pInputText id="fLogin" style="width: 30%" [(ngModel)]="dtoFilter.login"/>
+            <label for="fRol" style='font-weight: bold'>Rol: </label>
+            <p-dropdown id="fRol" [options]="sitRol" [(ngModel)]="dtoFilter.rolDto" [style]="{'width':'15%'}"></p-dropdown>
             <button  pButton icon="ui-icon-find-in-page"  (click)="buscar()" label="Buscar"></button>
 
         </div>
@@ -30,15 +32,21 @@
             <p-column [style]="{'width':'40px', 'text-align':'center'}"  selectionMode="multiple"></p-column>
 
             <p-column [style]="{'width':'70px', 'text-align':'center'}" field="id" header="Id"></p-column>
-            <p-column [style]="{'width':'50%', 'text-align':'left'}" field="nombre" header="Nombre" [sortable]="true"></p-column>
-            <p-column [style]="{'width':'20%', 'text-align':'left'}" field="login" header="Login"></p-column>
-            <p-column [style]="{'width':'20%', 'text-align':'left'}" field="email" header="Email"></p-column>
-            <p-column [style]="{'width':'20%', 'text-align':'left'}" field="estado" header="Estado">
+            <p-column [style]="{'width':'30%', 'text-align':'left'}" field="nombre" header="Nombre" [sortable]="true"></p-column>
+            <p-column [style]="{'width':'30%', 'text-align':'left'}" field="rolDto.nombre" header="Rol"></p-column>
+            <p-column [style]="{'width':'10%', 'text-align':'center'}" field="fecVigencia"  header="Fecha" >
                 <template let-col let-data="rowData" pTemplate="body">
-                    <span>{{data[col.field] | GeActivoInactivo}}</span>
+                    <span>{{data[col.field] | date: 'dd/MM/yyyy'}}</span>
                 </template>
             </p-column>
-            <p-column [style]="{'width':'20%', 'text-align':'left'}" field="indBloqueado" header="Bloqueado">
+            <p-column [style]="{'width':'20%', 'text-align':'left'}" field="login" header="Login"></p-column>
+            <p-column [style]="{'width':'20%', 'text-align':'left'}" field="email" header="Email"></p-column>
+            <p-column [style]="{'width':'20%', 'text-align':'center'}" field="estado" header="Activo">
+                <template let-col let-data="rowData" pTemplate="body">
+                    <span>{{data[col.field] | GeSiNoPipe}}</span>
+                </template>
+            </p-column>
+            <p-column [style]="{'width':'20%', 'text-align':'center'}" field="indBloqueado" header="Bloqueado">
                 <template let-col let-data="rowData" pTemplate="body">
                     <span>{{data[col.field] | GeSiNoPipe}}</span>
                 </template>
@@ -54,6 +62,8 @@
         <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
     </footer>
 </p-confirmDialog>
+
+<bitacoraList [registro]="id" [displayDialog]='displayBitaDialog' (respuesta)="respuestaBitacora($event)" [entidad]='entidad'></bitacoraList>
 
 <usuarioForm [dto]='dto' [displayDialog]='displayDialog' [accion]='accion' (respuesta)="respuesta($event)"></usuarioForm>
 

@@ -7,4 +7,6 @@ export class SeRolDto extends GeGenericDto{
     public estado: string;
     public opciones: string[];
     public treeWebSelected: any;
+
+    public eliminado: boolean;
 }

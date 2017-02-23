@@ -3,7 +3,7 @@ import {GeParametroDto} from '../../configuracion/GeParametro/model'
 import {GeMonedaDto} from '../../configuracion/GeMoneda/model'
 import {GeSocioNegocioDto} from '../../configuracion/GeSocioNegocio/model'
 
-export class GeSocioNegocioCuentaDto{
+export class GeSocioNegocioCuentaDto extends GeGenericDto{
     //M001-HVIVES-20170118-Se crea clase GeSocioNegocioCuentaDto para que contengas las variables de un socio de negocio cuenta
 
     public id: number;

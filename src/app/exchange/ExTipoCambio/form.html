@@ -1,0 +1,112 @@
+<p-dialog header="Tipo de Cambio" [(visible)]="displayDialog" [responsive]="true" [width]="widthDialog" [modal]="true"
+    *ngIf="dto" (onBeforeHide)='onBeforeHide($event)' (onBeforeShow)='onBeforeShow($event)'>
+    <form [formGroup]="tipoCambioForm" (ngSubmit)="save()">
+        <p-messages [value]="msgsPrincipal"></p-messages>
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+
+            <div class="ui-grid-row" *ngIf="accion==2">
+                <div class="ui-grid-col-2"><label for="id" style='font-weight: bold'>Id</label></div>
+                {{dto.id}}
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="fFecha"  style='font-weight: bold'>Fecha Vigencia *</label></div>
+                <div class="ui-grid-col-4">
+                    <p-calendar formControlName="fechaVigencia" [locale]="es" [showTime]="true" dateFormat="dd/mm/yy"></p-calendar>
+                    <control-messages [control]="tipoCambioForm.controls['fechaVigencia']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="fBanco"  style='font-weight: bold'>Banco *</label></div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown id="fBanco" [options]="sitBanco" formControlName="bancoDto" [style]="{'width':'100%'}"></p-dropdown>
+                    <control-messages [control]="tipoCambioForm.controls['bancoDto']"></control-messages>
+                </div>
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="fMonOrigen"  style='font-weight: bold'>Moneda Origen *</label></div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown id="fMonOrigen" [options]="sitMoneda" formControlName="monedaOrigenDto" [style]="{'width':'100%'}"></p-dropdown>
+                    <control-messages [control]="tipoCambioForm.controls['monedaOrigenDto']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="fMonDestino"  style='font-weight: bold'>Moneda Destino *</label></div>
+                <div class="ui-grid-col-4">
+                    <p-dropdown id="fMonDestino" [options]="sitMoneda" formControlName="monedaDestinoDto" [style]="{'width':'100%'}"></p-dropdown>
+                    <control-messages [control]="tipoCambioForm.controls['monedaDestinoDto']"></control-messages>
+                </div>
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="fPrecioCompra"  style='font-weight: bold'>Compra *</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="fPrecioCompra" formControlName="precioCompra" pTooltip="Ingrese Precio de Compra"/>
+                    <control-messages [control]="tipoCambioForm.controls['precioCompra']"></control-messages>
+                </div>
+                <div class="ui-grid-col-2"><label for="fPrecioVenta"  style='font-weight: bold'>Venta *</label></div>
+                <div class="ui-grid-col-4">
+                    <input pInputText id="fPrecioVenta" formControlName="precioVenta" pTooltip="Ingrese Precio de Venta"/>
+                    <control-messages [control]="tipoCambioForm.controls['precioVenta']"></control-messages>
+                </div>
+
+            </div>
+            <br>
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"><label for="comentario"  style='font-weight: bold'>Comentario</label></div>
+                <div class="ui-grid-col-10">
+                    <textarea rows="2" cols="30" pInputTextarea formControlName="comentario" pTooltip="Ingrese un comentario"></textarea>
+                    <control-messages [control]="tipoCambioForm.controls['comentario']"></control-messages>
+                </div>
+                <br>
+            </div>
+            <br>
+        </div>
+
+        <p-accordion>
+            <p-accordionTab header="Auditoria del Registro" *ngIf="accion==2">
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Creacion: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioCreacionDto.nombre || ''}}</div>
+                    <div class="ui-grid-col-2"><label for="usuario"  style='font-weight: bold; font-size:11px'>Usuario Modificación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>{{dto.usuarioDto.nombre || ''}}</div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Creación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.fechaCreacion | date:'dd/MM/yyyy hh:mm:ss'}}
+                    </div>
+                    <div class="ui-grid-col-2"><label for="fecha"  style='font-weight: bold; font-size:11px'>Fecha Modificación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.fecha | date:'dd/MM/yyyy hh:mm:ss'}}
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Creacion: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.terminalCreacion}}
+                    </div>
+                    <div class="ui-grid-col-2"><label for="terminal"  style='font-weight: bold; font-size:11px'>Terminal Modificación: </label></div>
+                    <div class="ui-grid-col-4" style='font-size:12px'>
+                        {{dto.terminal}}
+                    </div>
+                </div>
+
+            </p-accordionTab>
+
+        </p-accordion>
+
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" (click)="close()" label="Cerrar"></button>
+                <button type="submit" pButton icon="fa-check" [disabled]="!tipoCambioForm.valid" label="Guardar"></button>
+            </div>
+        </footer>
+    </form>
+</p-dialog>
+
+<p-confirmDialog width="425" icon="fa fa-question-circle" #cd>
+    <footer>
+        <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+    </footer>
+</p-confirmDialog>

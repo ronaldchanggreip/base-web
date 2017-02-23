@@ -26,6 +26,7 @@ export class GeSocioNegocioCuentaService extends GeBaseService{
         anyForm.controls["numCuenta"].setValue(dto.numCuenta);
         anyForm.controls["numCuentaCII"].setValue(dto.numCuentaCII);
         anyForm.controls["estado"].setValue(dto.estado);
+        this.addGenericValuesConstrols(anyForm, dto);
     }
 
     public getSocioNegocioCuenta(socio: number, banco: number, moneda: number, control: any): SelectItem[] {

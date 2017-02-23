@@ -10,11 +10,11 @@
                     Movimientos
                 </header>
 
-                <p-column field="tipoMovimientoDesc" header="Movimiento" [sortable]="true"></p-column>
-                <p-column field="usuarioDto.nombre" header="Usuario"></p-column>
-                <p-column field="etapaDesc" header="Etapa"></p-column>
-                <p-column field="estadoDesc" header="Estado"></p-column>
-                <p-column field="fecha" header="Fecha" [sortable]="true"></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'left'}" field="tipoMovimientoDesc" header="Movimiento" [sortable]="true"></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'left'}" field="usuarioDto.nombre" header="Usuario"></p-column>
+                <p-column *ngIf="etapaDesc!=null" [style]="{'width':'20%', 'text-align':'left'}" field="etapaDesc" header="Etapa"></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'left'}" field="estadoDesc" header="Estado"></p-column>
+                <p-column [style]="{'width':'20%', 'text-align':'center'}" field="fecha" header="Fecha" [sortable]="true"></p-column>
             </p-dataTable>
         </div>
     </div>

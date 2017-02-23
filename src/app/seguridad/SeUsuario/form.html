@@ -10,13 +10,13 @@
                     </div>
                     <br>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-2"><label for="fnombre"  style='font-weight: bold'>Nombre</label></div>
+                        <div class="ui-grid-col-2"><label for="fnombre"  style='font-weight: bold'>Nombre * </label></div>
                         <div class="ui-grid-col-4">
                             <input pInputText id="fnombre" formControlName="nombre" pTooltip="Ingrese el Nombre"/>
                             <control-messages [control]="usuarioForm.controls['nombre']"></control-messages>
                         </div>
 
-                        <div class="ui-grid-col-2"><label for="fRol" style='font-weight: bold'>Rol</label></div>
+                        <div class="ui-grid-col-2"><label for="fRol" style='font-weight: bold'>Rol * </label></div>
                         <div class="ui-grid-col-4">
                             <p-dropdown id="fRol" (onChange)="changeRol()" [options]="sitRol" formControlName="rolDto" [style]="{'width':'100%'}"></p-dropdown>
                             <control-messages [control]="usuarioForm.controls['rolDto']"></control-messages>
@@ -24,13 +24,21 @@
                     </div>
                     <br>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-2"><label for="fLogin"  style='font-weight: bold'>Login</label></div>
+                        <div class="ui-grid-col-2"><label for="fFecha"  style='font-weight: bold'>Fecha Vigencia * </label></div>
+                        <div class="ui-grid-col-4">
+                            <p-calendar formControlName="fecVigencia" [locale]="es" [showTime]="false" dateFormat="dd/mm/yy"></p-calendar>
+                            <control-messages [control]="usuarioForm.controls['fecVigencia']"></control-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"><label for="fLogin"  style='font-weight: bold'>Login * </label></div>
                         <div class="ui-grid-col-4">
                             <input pInputText id="fLogin" formControlName="login" pTooltip="Ingrese el Login"/>
                             <control-messages [control]="usuarioForm.controls['login']"></control-messages>
                         </div>
 
-                        <div class="ui-grid-col-2"><label for="fBloqueado" style='font-weight: bold'>Bloqueado</label></div>
+                        <div class="ui-grid-col-2"><label for="fBloqueado" style='font-weight: bold'>Bloqueado * </label></div>
                         <div class="ui-grid-col-4">
                             <p-checkbox binary="true" formControlName="indBloqueado"></p-checkbox>
                             <control-messages [control]="usuarioForm.controls['indBloqueado']"></control-messages>
@@ -38,13 +46,13 @@
                     </div>
                     <br>
                     <div class="ui-grid-row">
-                        <div class="ui-grid-col-2"><label for="fEmail"  style='font-weight: bold'>Email</label></div>
+                        <div class="ui-grid-col-2"><label for="fEmail"  style='font-weight: bold'>Email * </label></div>
                         <div class="ui-grid-col-4">
                             <input pInputText id="fEmail" formControlName="email" pTooltip="Ingrese el Email"/>
                             <control-messages [control]="usuarioForm.controls['email']"></control-messages>
                         </div>
 
-                        <div class="ui-grid-col-2"><label for="fEstado" style='font-weight: bold'>Estado</label></div>
+                        <div class="ui-grid-col-2"><label for="fEstado" style='font-weight: bold'>Activo * </label></div>
                         <div class="ui-grid-col-4">
                             <p-checkbox binary="true" formControlName="estado"></p-checkbox>
                             <control-messages [control]="usuarioForm.controls['estado']"></control-messages>
@@ -53,7 +61,7 @@
                     <div *ngIf="accion!=2">
                         <br>
                         <div class="ui-grid-row">
-                            <div class="ui-grid-col-2"><label for="fConfEmail"  style='font-weight: bold'>Confirmar Email</label></div>
+                            <div class="ui-grid-col-2"><label for="fConfEmail"  style='font-weight: bold'>Confirmar Email * </label></div>
                             <div class="ui-grid-col-4">
                                 <input pInputText id="fConfEmail" formControlName="confirmEmail" pTooltip="Confirme el Email"/>
                                 <control-messages [control]="usuarioForm.controls['confirmEmail']"></control-messages>
@@ -64,7 +72,7 @@
                     <div *ngIf="accion==2">
                         <br>
                         <div class="ui-grid-row">
-                            <div class="ui-grid-col-2"><label   style='font-weight: bold'>Cambiar contraseña</label></div>
+                            <div class="ui-grid-col-2"><label   style='font-weight: bold'>Cambiar contraseña * </label></div>
                             <div class="ui-grid-col-4">
                                 <p-inputSwitch onLabel="Si" offLabel="No" (onChange)="changeCambiarContrasena()" formControlName="cambiarPassword"></p-inputSwitch>
                             </div>
@@ -74,7 +82,7 @@
 
                     <div *ngIf="isChangePassword">
                         <div class="ui-grid-row">
-                            <div class="ui-grid-col-2"><label for="fContrasena"  style='font-weight: bold'>Contraseña</label></div>
+                            <div class="ui-grid-col-2"><label for="fContrasena"  style='font-weight: bold'>Contraseña * </label></div>
                             <div class="ui-grid-col-4">
                                 <input type="password" pPassword id="fContrasena" formControlName="contrasena" pTooltip="Ingrese el contraseña"/>
                                 <control-messages [control]="usuarioForm.controls['contrasena']"></control-messages>
@@ -82,7 +90,7 @@
                         </div>
                         <br>
                         <div class="ui-grid-row">
-                            <div class="ui-grid-col-2"><label for="fConfContrasena"  style='font-weight: bold'>Confirmar Contraseña</label></div>
+                            <div class="ui-grid-col-2"><label for="fConfContrasena"  style='font-weight: bold'>Confirmar Contraseña * </label></div>
                             <div class="ui-grid-col-4">
                                 <input type="password" pPassword id="fConfContrasena" formControlName="confirmContrasena" pTooltip="Confirme la contraseña"/>
                                 <control-messages [control]="usuarioForm.controls['confirmContrasena']"></control-messages>

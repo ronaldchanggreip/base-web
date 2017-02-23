@@ -143,6 +143,7 @@ export class GeBaseComponent {
 
     public addGenericControls(anyForm: FormGroup){
         anyForm.addControl("id", new FormControl('', Validators.nullValidator));
+        anyForm.addControl("eliminado", new FormControl('', Validators.nullValidator));
         anyForm.addControl("fecha", new FormControl('', Validators.nullValidator));
         anyForm.addControl("terminal", new FormControl('', Validators.nullValidator));
         anyForm.addControl("usuarioDto", new FormControl('', Validators.nullValidator));
@@ -153,6 +154,7 @@ export class GeBaseComponent {
 
     public addGenericControlsNoObj(anyForm: FormGroup){
         anyForm.addControl("id", new FormControl('', Validators.nullValidator));
+        anyForm.addControl("eliminado", new FormControl('', Validators.nullValidator));
         anyForm.addControl("fecha", new FormControl('', Validators.nullValidator));
         anyForm.addControl("terminal", new FormControl('', Validators.nullValidator));
         anyForm.addControl("usuario", new FormControl('', Validators.nullValidator));

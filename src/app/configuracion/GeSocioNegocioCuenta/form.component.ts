@@ -78,6 +78,8 @@ export class GeSocioNegocioCuentaFormComponent extends GeBaseComponent implement
             'estado': new FormControl('', Validators.nullValidator),
             'comentario': new FormControl('', Validators.maxLength(4000))
         });
+
+        this.addGenericControls(this.socioNegocioCuentaForm);
     }
 
     //metodo para recuperar el objeto de la base de datos con el id

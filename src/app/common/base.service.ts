@@ -4,9 +4,10 @@ import { Observable } from 'rxjs/Rx';
 import {GeErrorDto, GeMensajeHttpDto} from '../../app/generic/error/error.model';
 import { AppConfiguration } from './app.configuration';
 import { GeGenericConst } from './generic.const';
-import { GeFiltroDto } from './generic.model.filtro'
+import { GeFiltroDto, GeFiltroDetaDto } from './generic.model.filtro'
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 import {AuthService} from "../seguridad/auth.service";
+//import {extraEntryParser} from "angular-cli/models";
 
 
 export class GeBaseService {
@@ -16,12 +17,14 @@ export class GeBaseService {
     public headers: Headers;
     public headersSecurity: Headers;
     public url: string;
+    public urlEntidad: string;
     public urlSecurity: string;
     public opts: RequestOptionsArgs;
     public optsSecurity: RequestOptionsArgs;
     public http: Http;
     public configuration: AppConfiguration;
     public geGenericConst: GeGenericConst;
+    public entNoEliminado: string[] = ["bitacora/"];
 
 
     constructor(serviceName: string, urlEntidad: string, http: Http, configuration: AppConfiguration, geGenericConst: GeGenericConst) {
@@ -31,27 +34,33 @@ export class GeBaseService {
         this.geGenericConst = geGenericConst;
 
         this.url = this.configuration.baseUrl + urlEntidad;
+        this.urlEntidad = urlEntidad;
         this.headers = this.configuration.headers;
-        this.opts = { headers: this.headers }
+        this.opts = { headers: this.headers };
 
         this.urlSecurity = this.configuration.baseUrlSecurity;
         this.headersSecurity = this.configuration.headersSecurity;
         this.optsSecurity = { headers: this.headersSecurity };
     }
+
     public gets = (filtro: GeFiltroDto): Observable<any> => {
-        //console.log(JSON.stringify(filtro))
         let opts: RequestOptionsArgs;
 
         let headersSecurity: Headers = new Headers();
         let token: string = this.getTokenSession();
-        /*if (sessionStorage.getItem('access_token_r')) { //Si existe token refresh
-            token = sessionStorage.getItem('access_token_r');
-        } else {
-            token = sessionStorage.getItem('access_token');
-        }*/
         headersSecurity.append('Authorization', 'Bearer ' + token)
 
         opts = { headers: headersSecurity };
+
+        //Agregamos la logica para mostrar siempre los elementos no eliminados
+        if(this.entNoEliminado.indexOf(this.urlEntidad) == -1){
+            if(filtro.fplantilla){ // Si tiene plantilla
+                filtro.plantilla += " and {eliminado}";
+                filtro.filtros.push(new GeFiltroDetaDto('eliminado', this.geGenericConst.opeNeq, this.geGenericConst.tdBoolean.codigo, 'true'));
+            }else{
+                filtro.filtros.push(new GeFiltroDetaDto('eliminado', this.geGenericConst.opeNeq, this.geGenericConst.tdBoolean.codigo, 'true'));
+            }
+        }
 
         let params: URLSearchParams = new URLSearchParams();
         params.set("filtro", JSON.stringify(filtro));
@@ -59,18 +68,12 @@ export class GeBaseService {
         opts.search = params;
 
         return this.http.get(this.url + "gets", opts).map(this.cargarData).catch(this.cargarError);
-
     }
 
     //Servicio para obtener un dto de la entidad representada por su ID
     public get = (id: number): Observable<any> => {
         let headersSecurity: Headers = new Headers();
         let token: string = this.getTokenSession();
-        /*if (sessionStorage.getItem('access_token_r')) { //Si existe token refresh
-            token = sessionStorage.getItem('access_token_r');
-        } else {
-            token = sessionStorage.getItem('access_token');
-        }*/
         headersSecurity.append('Authorization', 'Bearer ' + token)
 
         return this.http.get(this.url + "getsId/" + id, { headers: headersSecurity }).map(this.cargarData)
@@ -82,13 +85,10 @@ export class GeBaseService {
         //console.log(JSON.stringify(dto))
         let headersSecurity: Headers = this.headers;
         let token: string = this.getTokenSession();
-        /*let token: string;
-        if (sessionStorage.getItem('access_token_r')) { //Si existe token refresh
-            token = sessionStorage.getItem('access_token_r');
-        } else {
-            token = sessionStorage.getItem('access_token');
-        }*/
         headersSecurity.append('Authorization', 'Bearer ' + token)
+
+        //Agregamos por defecto el valor del campo eliminado
+        dto.eliminado = 0;
 
         return this.http.post(this.url + "save", dto, { headers: headersSecurity })
             .map(this.cargarData)
@@ -98,12 +98,6 @@ export class GeBaseService {
     //Servicio para actualizar una nueva entidad en la base de datos
     public update = (dto: any): Observable<any> => {
         let headersSecurity: Headers = this.headers;
-        /*let token: string;
-        if (sessionStorage.getItem('access_token_r')) { //Si existe token refresh
-            token = sessionStorage.getItem('access_token_r');
-        } else {
-            token = sessionStorage.getItem('access_token');
-        }*/
         let token: string = this.getTokenSession();
         headersSecurity.append('Authorization', 'Bearer ' + token)
 
@@ -115,16 +109,20 @@ export class GeBaseService {
     //Servicio para eliminar una nueva entidad en la base de datos
     public delete = (dto: any): Observable<any> => {
         let headersSecurity: Headers = this.headers;
-        /*let token: string;
-        if (sessionStorage.getItem('access_token_r')) { //Si existe token refresh
-            token = sessionStorage.getItem('access_token_r');
-        } else {
-            token = sessionStorage.getItem('access_token');
-        }*/
         let token: string = this.getTokenSession();
         headersSecurity.append('Authorization', 'Bearer ' + token)
 
         return this.http.post(this.url + "save", dto, { headers: headersSecurity })
+            .map(this.cargarData)
+            .catch(this.cargarError);
+    }
+
+    public deleteLogico = (ids: number[]): Observable<any> => {
+        let headersSecurity: Headers = this.headers;
+        let token: string = this.getTokenSession();
+        headersSecurity.append('Authorization', 'Bearer ' + token)
+
+        return this.http.post(this.url + "eliminar-logico", ids, { headers: headersSecurity })
             .map(this.cargarData)
             .catch(this.cargarError);
     }
@@ -134,6 +132,7 @@ export class GeBaseService {
     public addGenericValuesConstrols(anyForm: FormGroup, dto: any){
         anyForm.controls["id"].setValue(dto.id);
         anyForm.controls["fecha"].setValue(dto.fecha);
+        anyForm.controls["eliminado"].setValue(dto.eliminado);
         anyForm.controls["terminal"].setValue(dto.terminal);
         anyForm.controls["usuarioDto"].setValue(dto.usuarioDto);
         anyForm.controls["fechaCreacion"].setValue(dto.fechaCreacion);
@@ -144,6 +143,7 @@ export class GeBaseService {
     public addGenericValuesConstrolsNoObj(anyForm: FormGroup, dto: any){
         anyForm.controls["id"].setValue(dto.id);
         anyForm.controls["fecha"].setValue(dto.fecha);
+        anyForm.controls["eliminado"].setValue(dto.eliminado);
         anyForm.controls["terminal"].setValue(dto.terminal);
         anyForm.controls["usuario"].setValue(dto.usuario);
         anyForm.controls["fechaCreacion"].setValue(dto.fechaCreacion);
@@ -153,7 +153,6 @@ export class GeBaseService {
 
     public log(p: any) {
         console.log(p);
-
     }
 
     public cargarData(res: Response): any {
@@ -164,7 +163,6 @@ export class GeBaseService {
                 let rptaDto: GeMensajeHttpDto = new GeMensajeHttpDto(rpta.codigoHttp,rpta.codigoGrupoHttp,rpta.nombreGrupoHttp,rpta.resumenHttp, rpta.mensajeSistemaHttp,rpta.mensajeUsuario);
                 rptaDto.detalle = rpta.detalle;
                 rptaDto.respuesta = rpta.respuesta;
-                //return Observable.create(rptaDto);
                 return rptaDto;
             }else {
                 let errorDto: GeMensajeHttpDto = new GeMensajeHttpDto(rpta.codigoHttp,rpta.codigoGrupoHttp,rpta.nombreGrupoHttp,rpta.resumenHttp, rpta.mensajeSistemaHttp,rpta.mensajeUsuario);
@@ -177,8 +175,6 @@ export class GeBaseService {
 
 
     public cargarError(error: Response | any): Observable<any> {
-        //console.log('cargarError')
-        //console.log(error)
         // In a real world app, we might use a remote logging infrastructure
         if (error instanceof Response) {
 
@@ -207,7 +203,6 @@ export class GeBaseService {
         } else {
             token = sessionStorage.getItem('access_token');
         }
-        //headersSecurity.append('Authorization', 'Bearer ' + token)
         return token;
     }
 

@@ -25,5 +25,4 @@ export class GeSocioNegocioDto extends GeGenericDto{
     public indClienteDesc: string;
     public indProveedorDesc: string;
     public estado: string;
-    
 }

@@ -15,4 +15,5 @@ export class GeGenericDto {
     public fechaCreacion:Date;
     public terminalCreacion:string;
     public usuarioCreacionDto:SeUsuarioDto;
+    public eliminado: boolean;
 }

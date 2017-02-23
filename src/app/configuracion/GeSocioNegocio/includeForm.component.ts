@@ -68,7 +68,8 @@ export class GeSocioNegocioIncludeFormComponent extends GeBaseComponent implemen
             'movilSecundario': new FormControl('', Validators.maxLength(50)),
             'nacionalidadDto': new FormControl('', Validators.required),
             'comentario': new FormControl('', Validators.maxLength(4000)),
-            'estado': new FormControl('', Validators.required)
+            'estado': new FormControl('', Validators.required),
+            'eliminado': new FormControl('', Validators.nullValidator)
         });
         this.addGenericControls(this.socioNegocioForm);
 

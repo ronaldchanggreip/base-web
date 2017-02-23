@@ -33,25 +33,13 @@ import {SeUsuarioDto} from "./seguridad/SeUsuario/model";
                         
                         <ul class="ultima-menu animated fadeInDown">
                             <li role="menuitem">
-                               <a  (click)="app.showDlgInfoUsuario()" class="ripplelink">
-                                    <i class="material-icons">person</i>
-                                    <span id="spProfileName4">Perfil</span>
-                                </a>
-                            </li>
-                            <li role="menuitem">
                                <a class="ripplelink" [routerLink]="['/profileForm']" [routerLinkActive]="['active-menulink']">
                                     <i class="material-icons">person</i>
-                                    <span id="spProfileName4">Perfil conf</span>
+                                    <span id="spProfileName5">Mi Perfil</span>
                                 </a>
                             </li>
                             <li role="menuitem">
-                                <a href="#">
-                                    <i class="material-icons">security</i>
-                                    <span>Contraseña</span>
-                                </a>
-                            </li>
-                            <li role="menuitem">
-                                <a  (click)="app.showDlgInfoSistema()"  class="ripplelink">
+                                <a  href="javascript:void()" (click)="app.showDlgInfoSistema()"  class="ripplelink">
                                     <i class="material-icons">settings_application</i>
                                     <span>Sistema</span>
                                 </a>

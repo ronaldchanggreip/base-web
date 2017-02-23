@@ -36,7 +36,7 @@
                     <template let-col let-data="rowData" pTemplate="body">
                         <button pButton (click)="modificar(data)" icon="ui-icon-edit"></button>
                         <button pButton (click)="descargar($event, opImage, opPdf, data)" icon="ui-icon-file-download"></button>
-                        <button pButton (click)="eliminar(data)" icon="ui-icon-clear"></button>
+                        <button pButton (click)="eliminar()" icon="ui-icon-clear"></button>
                     </template>
                 </p-column>
             </p-dataTable>
